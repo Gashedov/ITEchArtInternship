@@ -29,7 +29,7 @@ class HTTPClient{
         let urlRequest = URLRequest(url: (url?.url)!)
      
         let session = URLSession(configuration: .default)
-        print("git test")
+        
         
         let task = session.dataTask(with: urlRequest) {
             (data, response, error) in
