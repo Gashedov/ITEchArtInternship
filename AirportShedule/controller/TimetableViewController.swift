@@ -31,7 +31,7 @@ class SheduleTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
         if objectArray[section].isOpen == true{
-            return objectArray[section].sectionObject?.count ?? 0
+            return objectArray[section].sectionObject.count
         }
         else {
             return 1
@@ -48,7 +48,7 @@ class SheduleTableViewController: UITableViewController {
         }
         else {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "SheduleTableViewCell") else{return UITableViewCell()}
-            cell.textLabel?.text = objectArray[indexPath.section].sectionObject?[indexPath.row]
+            cell.textLabel?.text = objectArray[indexPath.section].sectionObject[indexPath.row]
             cell.backgroundColor = UIColor.white
             return cell
             

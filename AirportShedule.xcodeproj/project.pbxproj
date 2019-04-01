@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3FBB64CD225234C900928A85 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FBB64CC225234C900928A85 /* CoreDataManager.swift */; };
 		3FC5F2D4224CF2DD003D475B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FC5F2D3224CF2DD003D475B /* AppDelegate.swift */; };
 		3FC5F2D6224CF2DD003D475B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FC5F2D5224CF2DD003D475B /* ViewController.swift */; };
 		3FC5F2D9224CF2DD003D475B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3FC5F2D7224CF2DD003D475B /* Main.storyboard */; };
@@ -32,6 +33,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3FBB64CC225234C900928A85 /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
 		3FC5F2D0224CF2DD003D475B /* AirportShedule.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AirportShedule.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3FC5F2D3224CF2DD003D475B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3FC5F2D5224CF2DD003D475B /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -98,6 +100,7 @@
 				3FC5F2DF224CF2DE003D475B /* LaunchScreen.storyboard */,
 				3FC5F2E2224CF2DE003D475B /* Info.plist */,
 				3FC5F2DA224CF2DD003D475B /* AirportShedule.xcdatamodeld */,
+				3FBB64CC225234C900928A85 /* CoreDataManager.swift */,
 			);
 			path = AirportShedule;
 			sourceTree = "<group>";
@@ -245,6 +248,7 @@
 				3FC5F306224CF7AA003D475B /* HTTPClient.swift in Sources */,
 				3FC5F308224CF7B1003D475B /* Parser.swift in Sources */,
 				3FC5F304224CF7A5003D475B /* FlightInfo.swift in Sources */,
+				3FBB64CD225234C900928A85 /* CoreDataManager.swift in Sources */,
 				3FC5F2DC224CF2DD003D475B /* AirportShedule.xcdatamodeld in Sources */,
 				3FC5F2D4224CF2DD003D475B /* AppDelegate.swift in Sources */,
 			);

@@ -39,7 +39,7 @@ struct CommonFlightInfo: Decodable {
 
 struct AirportInfo{
     var country: String
-    var name: String
+    var name: String?
     var city: String?
     var code: String
 }
