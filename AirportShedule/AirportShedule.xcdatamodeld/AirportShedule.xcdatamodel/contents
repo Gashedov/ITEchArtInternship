@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14460.32" systemVersion="18E194d" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="Airport" representedClassName="Airport" syncable="YES" codeGenerationType="class">
-        <attribute name="country" attributeType="String" syncable="YES"/>
-        <relationship name="contains" toMany="YES" deletionRule="Nullify" destinationEntity="AirportAttributes" inverseName="storedIn" inverseEntity="AirportAttributes" syncable="YES"/>
-    </entity>
-    <entity name="AirportAttributes" representedClassName="AirportAttributes" syncable="YES" codeGenerationType="class">
-        <attribute name="airportName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="city" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="code" attributeType="String" syncable="YES"/>
-        <relationship name="storedIn" maxCount="1" deletionRule="Nullify" destinationEntity="Airport" inverseName="contains" inverseEntity="Airport" syncable="YES"/>
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="country" maxCount="1" deletionRule="Nullify" destinationEntity="Country" inverseName="airports" inverseEntity="Country" syncable="YES"/>
+    </entity>
+    <entity name="Country" representedClassName="Country" syncable="YES" codeGenerationType="class">
+        <attribute name="name" attributeType="String" syncable="YES"/>
+        <relationship name="airports" toMany="YES" deletionRule="Cascade" destinationEntity="Airport" inverseName="country" inverseEntity="Airport" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Airport" positionX="-63" positionY="-18" width="128" height="73"/>
-        <element name="AirportAttributes" positionX="98.80078125" positionY="-47.98046875" width="128" height="103"/>
+        <element name="Airport" positionX="98.80078125" positionY="-47.98046875" width="128" height="105"/>
+        <element name="Country" positionX="-63" positionY="-18" width="128" height="75"/>
     </elements>
 </model>

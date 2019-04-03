@@ -11,11 +11,11 @@ import Foundation
 struct SheduleInfoToDisplay{
     var isOpen: Bool
     var sectionName: String
-    var sectionObject : [Atributs]
+    var sectionObject : [Attributs]
     
 }
 
-struct Atributs{
+struct Attributs{
     var city: String?
     var airportName: String?
     var code : String
@@ -29,26 +29,29 @@ class Parser{
         
         for airport in objects{
             shedule.append(SheduleInfoToDisplay(isOpen: false, sectionName: airport.country,
-                                                sectionObject: [Atributs(city: airport.city ?? "", airportName: airport.name ?? "", code: airport.code)] ))
+                                                sectionObject: [Attributs(city: airport.city ?? "", airportName: airport.name ?? "", code: airport.code)] ))
         }
         
 //        shedule.reduce([SheduleInfoToDisplay]()) { (prev, new) in
-//            if prev.contains(where: {$0.sectionName == new.sectionName}){
-//
+//            for i in 0..<prev.count{
+//                if prev[i].sectionName == new.sectionName{
+//                    SheduleInfoToDisplay(isOpen: false,  sectionName: prev[i].sectionName, sectionObject: prev[i].sectionObject + new.sectionObject)
+//                }
 //            }
-//            return nil
+//            return prev
 //        }
         
-        for i in 0..<shedule.count{
-            for j in i..<shedule.count{
+        var sheduleForDisplay = [SheduleInfoToDisplay]()
+        
+        let size  = shedule.count
+        for i in 0..<size{
+            for j in i..<size{
                 if shedule[i].sectionName == shedule[j].sectionName{
-                    shedule[i].sectionObject += shedule[j].sectionObject
-                    shedule.remove(at: j)
+                    sheduleForDisplay.append(SheduleInfoToDisplay(isOpen: false,  sectionName: shedule[i].sectionName, sectionObject: shedule[i].sectionObject + shedule[j].sectionObject))
+                }
                 }
             }
-        }
         
-        
-        return shedule
+        return sheduleForDisplay
     }
 }

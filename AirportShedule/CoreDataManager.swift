@@ -25,21 +25,15 @@ class CoreDataManager {
         let context = appDelegate.persistentContainer.viewContext
         
         do {
-            let airportResult = try context.fetch(Airport.fetchRequest())
-            
-            guard let airports = airportResult as? [Airport] else {
-                print("Can not load airports info from Core Data")
-                return downloadedAirports
-            }
-            
-            for airport in airports {
-                downloadedAirports.append(SheduleInfoToDisplay(isOpen: false, sectionName: airport.country ?? "UNknown country", sectionObject: []))
+            let request: NSFetchRequest<Country> = Country.fetchRequest()
+            let airportResult = try context.fetch(request)
+            for airport in airportResult {
+                downloadedAirports.append(SheduleInfoToDisplay(isOpen: false, sectionName: airport.name ?? "", sectionObject: converteToAttributes(set: airport.airports ?? NSSet())))
             }
 
         } catch let error as NSError {
             print("Could not save \(error)")
         }
-        
         return downloadedAirports
     }
     
@@ -61,17 +55,18 @@ class CoreDataManager {
             print("Start save data to DB")
             
             for airport in airports {
-                let cdAirport = Airport(context:  context)
-                cdAirport.setValue(airport.sectionName, forKey: "country")
+                let cdCountry = NSEntityDescription.insertNewObject(forEntityName: "Country", into: context) as! Country
+                cdCountry.name = airport.sectionName
                 
-                for atribut in airport.sectionObject {
-                    
-                    let cdAirportAttributes = AirportAttributes(context: context)
-                    cdAirportAttributes.setValue(atribut.city, forKey: "city")
-                    cdAirportAttributes.setValue(atribut.code, forKey: "code")
-                    cdAirportAttributes.setValue(atribut.airportName, forKey: "airportName")
-                    
-                }
+                airport.sectionObject
+                    .map { attrs -> Airport in
+                        let airport = NSEntityDescription.insertNewObject(forEntityName: "Airport", into: context) as! Airport
+                        airport.city = attrs.city
+                        airport.code = attrs.code
+                        airport.name = attrs.airportName
+                        return airport
+                    }
+                    .forEach(cdCountry.addToAirports)
                 do {
                     try context.save()
                 } catch let error as NSError {
@@ -81,5 +76,16 @@ class CoreDataManager {
             
             print("Finish save data")
         }
+    }
+    
+    private func converteToAttributes(set: NSSet)->[Attributs]{
+        var attributs = [Attributs]()
+        
+        for value in set{
+            if let airport = value as? Airport{
+            attributs.append(Attributs(city: airport.city, airportName: airport.name, code: airport.code ?? "" ))
+            }
+        }
+        return attributs
     }
 }

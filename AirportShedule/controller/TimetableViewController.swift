@@ -10,14 +10,18 @@ import UIKit
 
 class SheduleTableViewController: UITableViewController {
     
-    var airportArray = [AirportInfo]()
     
     var objectArray = [SheduleInfoToDisplay]()
-    let httpClient = HTTPClient()
+    let cdManager = CoreDataManager(appDelegate: UIApplication.shared.delegate as! AppDelegate)
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setData()
+        objectArray = cdManager.loadDataFromDB()
+        if objectArray.isEmpty{
+            setData()
+            objectArray = cdManager.loadDataFromDB()
+        }
+        
         
     }
     
@@ -41,14 +45,14 @@ class SheduleTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.row == 0{
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: "SheduleTableViewCell") else{return UITableViewCell()}
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: "SheduleTableViewSectionCell") else{return UITableViewCell()}
             cell.textLabel?.text = objectArray[indexPath.section].sectionName
             cell.backgroundColor = UIColor.gray
             return cell
         }
         else {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "SheduleTableViewCell") else{return UITableViewCell()}
-            cell.textLabel?.text = objectArray[indexPath.section].sectionObject[indexPath.row]
+            //cell.textLabel?.text = objectArray[indexPath.section].sectionObject[indexPath.row]
             cell.backgroundColor = UIColor.white
             return cell
             
@@ -71,9 +75,11 @@ class SheduleTableViewController: UITableViewController {
     private func setData(){
         let client = HTTPClient()
         client.getAirportInfo { [weak self] (airports , errors) in
-            self?.airportArray = airports
             let parser = Parser()
-            self?.objectArray = parser.prepareDataForDisplay(objects: self?.airportArray ?? [])
+            let data = parser.prepareDataForDisplay(objects: airports)
+            
+            self?.objectArray = data
+            self?.cdManager.saveAirports(airports: data)
             self?.tableView.reloadData()
         }
     }
