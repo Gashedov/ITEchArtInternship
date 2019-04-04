@@ -34,6 +34,7 @@ class CoreDataManager {
         } catch let error as NSError {
             print("Could not save \(error)")
         }
+        print("Data loaded")
         return downloadedAirports
     }
     
@@ -74,7 +75,7 @@ class CoreDataManager {
                 }
             }
             
-            print("Finish save data")
+            print("Data saved")
         }
     }
     

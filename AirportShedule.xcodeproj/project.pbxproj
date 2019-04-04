@@ -20,6 +20,7 @@
 		3FC5F304224CF7A5003D475B /* FlightInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FC5F303224CF7A5003D475B /* FlightInfo.swift */; };
 		3FC5F306224CF7AA003D475B /* HTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FC5F305224CF7AA003D475B /* HTTPClient.swift */; };
 		3FC5F308224CF7B1003D475B /* Parser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FC5F307224CF7B1003D475B /* Parser.swift */; };
+		3FEDAA442255F2B0001BD26F /* AirportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FEDAA432255F2B0001BD26F /* AirportService.swift */; };
 		3FF7FA2B2254F124006F02BD /* TableViewSectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FF7FA2A2254F124006F02BD /* TableViewSectionCell.swift */; };
 /* End PBXBuildFile section */
 
@@ -51,6 +52,7 @@
 		3FC5F303224CF7A5003D475B /* FlightInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlightInfo.swift; sourceTree = "<group>"; };
 		3FC5F305224CF7AA003D475B /* HTTPClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTTPClient.swift; sourceTree = "<group>"; };
 		3FC5F307224CF7B1003D475B /* Parser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Parser.swift; sourceTree = "<group>"; };
+		3FEDAA432255F2B0001BD26F /* AirportService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AirportService.swift; sourceTree = "<group>"; };
 		3FF7FA2A2254F124006F02BD /* TableViewSectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewSectionCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -122,6 +124,7 @@
 				3FC5F307224CF7B1003D475B /* Parser.swift */,
 				3FC5F305224CF7AA003D475B /* HTTPClient.swift */,
 				3FC5F303224CF7A5003D475B /* FlightInfo.swift */,
+				3FEDAA432255F2B0001BD26F /* AirportService.swift */,
 			);
 			path = model;
 			sourceTree = "<group>";
@@ -252,6 +255,7 @@
 				3FC5F308224CF7B1003D475B /* Parser.swift in Sources */,
 				3FC5F304224CF7A5003D475B /* FlightInfo.swift in Sources */,
 				3FBB64CD225234C900928A85 /* CoreDataManager.swift in Sources */,
+				3FEDAA442255F2B0001BD26F /* AirportService.swift in Sources */,
 				3FC5F2DC224CF2DD003D475B /* AirportShedule.xcdatamodeld in Sources */,
 				3FC5F2D4224CF2DD003D475B /* AppDelegate.swift in Sources */,
 				3FF7FA2B2254F124006F02BD /* TableViewSectionCell.swift in Sources */,

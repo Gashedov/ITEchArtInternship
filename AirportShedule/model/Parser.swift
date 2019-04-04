@@ -21,16 +21,34 @@ struct Attributs{
     var code : String
 }
 
+struct PreparedAirportsList {
+    let contries: [String]
+    let aiportsByContry: [String : [AirportInfo]]
+}
 
 class Parser{
-    func prepareDataForDisplay(objects: [AirportInfo]) -> [SheduleInfoToDisplay]{
-        var shedule =  [SheduleInfoToDisplay]()
+    func prepareDataForDisplay(objects: [AirportInfo]) -> PreparedAirportsList{
+//        var shedule =  [SheduleInfoToDisplay]()
         
         
-        for airport in objects{
-            shedule.append(SheduleInfoToDisplay(isOpen: false, sectionName: airport.country,
-                                                sectionObject: [Attributs(city: airport.city ?? "", airportName: airport.name ?? "", code: airport.code)] ))
+//        for airport in objects{
+//            shedule.append(SheduleInfoToDisplay(isOpen: false, sectionName: airport.country,
+//                                                sectionObject: [Attributs(city: airport.city ?? "", airportName: airport.name ?? "", code: airport.code)] ))
+//        }
+        
+        
+        var aiportsByContry = [String : [AirportInfo]]()
+        
+        for airport in objects {
+            var airports = aiportsByContry[airport.country] ?? []
+            airports.append(airport)
+            aiportsByContry[airport.country] = airports
         }
+        
+        let countries = aiportsByContry.keys.sorted()
+        
+        return PreparedAirportsList(contries: countries, aiportsByContry: aiportsByContry)
+        
         
 //        shedule.reduce([SheduleInfoToDisplay]()) { (prev, new) in
 //            for i in 0..<prev.count{
@@ -40,18 +58,22 @@ class Parser{
 //            }
 //            return prev
 //        }
-        
-        var sheduleForDisplay = [SheduleInfoToDisplay]()
-        
-        let size  = shedule.count
-        for i in 0..<size{
-            for j in i..<size{
-                if shedule[i].sectionName == shedule[j].sectionName{
-                    sheduleForDisplay.append(SheduleInfoToDisplay(isOpen: false,  sectionName: shedule[i].sectionName, sectionObject: shedule[i].sectionObject + shedule[j].sectionObject))
-                }
-                }
-            }
-        
-        return sheduleForDisplay
+//
+//        var sheduleForDisplay = [SheduleInfoToDisplay]()
+//        var attributs = [Attributs]()
+//
+//        let size  = shedule.count
+//        for i in 0..<size{
+//            attributs += shedule[i].sectionObject
+//            for j in i+1..<size{
+//                if shedule[i].sectionName == shedule[j].sectionName{
+//                    attributs += shedule[j].sectionObject
+//                }
+//                }
+//            sheduleForDisplay.append(SheduleInfoToDisplay(isOpen: false,  sectionName: shedule[i].sectionName, sectionObject: attributs))
+//            attributs = []
+//            }
+//
+//        return sheduleForDisplay
     }
 }
