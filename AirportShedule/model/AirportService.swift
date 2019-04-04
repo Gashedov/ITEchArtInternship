@@ -15,15 +15,28 @@ import UIKit
 //    2.2.0 remova all from core data
 //  2.2 store to core data
 // 3. take from db
+
 class AirportsService {
     
     let cdManager = CoreDataManager(appDelegate: UIApplication.shared.delegate as! AppDelegate)
     
-    func getAirpots(callback: @escaping (PreparedAirportsList) -> Void) {
+    func getAirpots(callback: @escaping ([SheduleInfoToDisplay]) -> Void) {
+        var airportList = cdManager.loadDataFromDB()
         
-    var airportList = cdManager.loadDataFromDB()
+        if airportList.isEmpty{
+            let client = HTTPClient()
+            
+            client.getAirportInfo { [weak self] (airports , errors) in
+                let parser = Parser()
+                airportList = parser.prepareDataForDisplay(objects: airports)
+                
+                self?.cdManager.saveAirports(airports: airportList)
+                callback(airportList)
+            }
+        }else{
+            callback(airportList)
+        }
         
     }
     
-
 }

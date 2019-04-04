@@ -11,18 +11,16 @@ import UIKit
 class SheduleTableViewController: UITableViewController {
     
     
-    var objectArray = [SheduleInfoToDisplay]()
-    
+    var objectArray = [SheduleInfoToDisplay](){
+        didSet{
+            print("data receive")
+        }
+    }
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        objectArray = cdManager.loadDataFromDB()
-        if objectArray.isEmpty{
-            setData()
-            objectArray = cdManager.loadDataFromDB()
-        }
-        
-        
+        setData()
     }
     
     // MARK: - Table view data source
@@ -71,20 +69,13 @@ class SheduleTableViewController: UITableViewController {
             tableView.reloadSections(sections, with: .none)
         }
     }
-    
+    // TODO: - add async request
     private func setData(){
         let service = AirportsService()
-//        service.syncAirportsIfNeeded(callback: <#T##(Bool) -> ()#>)
-        
-        
-        let client = HTTPClient()
-        client.getAirportInfo { [weak self] (airports , errors) in
-            let parser = Parser()
-            let data = parser.prepareDataForDisplay(objects: airports)
-            
-            self?.objectArray = data
-            self?.cdManager.saveAirports(airports: data)
-            self?.tableView.reloadData()
+        service.getAirpots{ airportList in
+            self.objectArray = airportList
+        }
+            self.tableView.reloadData()
         }
     }
 
@@ -143,4 +134,4 @@ class SheduleTableViewController: UITableViewController {
     }
     */
 
-}
+

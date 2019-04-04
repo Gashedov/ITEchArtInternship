@@ -22,20 +22,23 @@ class CoreDataManager {
         print("load Data from DB")
         
         var downloadedAirports = [SheduleInfoToDisplay]()
-        let context = appDelegate.persistentContainer.viewContext
+        let context = appDelegate.persistentContainer.newBackgroundContext() //viewContext
         
-        do {
-            let request: NSFetchRequest<Country> = Country.fetchRequest()
-            let airportResult = try context.fetch(request)
-            for airport in airportResult {
-                downloadedAirports.append(SheduleInfoToDisplay(isOpen: false, sectionName: airport.name ?? "", sectionObject: converteToAttributes(set: airport.airports ?? NSSet())))
+        appDelegate.persistentContainer.performBackgroundTask { _ in
+            do {
+                let request: NSFetchRequest<Country> = Country.fetchRequest()
+                
+                let airportResult = try context.fetch(request)
+                for airport in airportResult {
+                    downloadedAirports.append(SheduleInfoToDisplay(isOpen: false, sectionName: airport.name ?? "", sectionObject: converteToAttributes(set: airport.airports ?? NSSet())))
+                }
+                
+            } catch let error as NSError {
+                print("Could not save \(error)")
             }
-
-        } catch let error as NSError {
-            print("Could not save \(error)")
+            print("Data loaded")
+            return downloadedAirports
         }
-        print("Data loaded")
-        return downloadedAirports
     }
     
     

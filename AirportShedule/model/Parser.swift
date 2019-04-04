@@ -22,20 +22,12 @@ struct Attributs{
 }
 
 struct PreparedAirportsList {
-    let contries: [String]
-    let aiportsByContry: [String : [AirportInfo]]
+    let countries: [String]
+    let aiportsByCountry: [String : [AirportInfo]]
 }
 
 class Parser{
-    func prepareDataForDisplay(objects: [AirportInfo]) -> PreparedAirportsList{
-//        var shedule =  [SheduleInfoToDisplay]()
-        
-        
-//        for airport in objects{
-//            shedule.append(SheduleInfoToDisplay(isOpen: false, sectionName: airport.country,
-//                                                sectionObject: [Attributs(city: airport.city ?? "", airportName: airport.name ?? "", code: airport.code)] ))
-//        }
-        
+    func prepareDataForDisplay(objects: [AirportInfo]) -> [SheduleInfoToDisplay]{
         
         var aiportsByContry = [String : [AirportInfo]]()
         
@@ -46,10 +38,28 @@ class Parser{
         }
         
         let countries = aiportsByContry.keys.sorted()
+        let list = PreparedAirportsList(countries: countries, aiportsByCountry: aiportsByContry)
         
-        return PreparedAirportsList(contries: countries, aiportsByContry: aiportsByContry)
+        var shedule =  [SheduleInfoToDisplay]()
         
+        for country in list.countries{
+                shedule.append(SheduleInfoToDisplay(isOpen: false, sectionName: country,
+                                                    sectionObject:convertToAttributs(airportInfo: list.aiportsByCountry[country] ?? []) ))
+        }
         
+        return shedule
+    }
+    
+    private func convertToAttributs(airportInfo : [AirportInfo])-> [Attributs]{
+        var attributs = [Attributs]()
+        
+        for airport in airportInfo{
+            attributs.append(Attributs(city: airport.city, airportName: airport.name, code: airport.code ))
+        }
+        return attributs
+    }
+}
+
 //        shedule.reduce([SheduleInfoToDisplay]()) { (prev, new) in
 //            for i in 0..<prev.count{
 //                if prev[i].sectionName == new.sectionName{
@@ -75,5 +85,3 @@ class Parser{
 //            }
 //
 //        return sheduleForDisplay
-    }
-}
