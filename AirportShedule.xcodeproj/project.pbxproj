@@ -7,9 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3F6C8C53225B92B4008C1DA1 /* CommonFlightInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F6C8C52225B92B4008C1DA1 /* CommonFlightInfo.swift */; };
+		3F6C8C56225B931F008C1DA1 /* AirportsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F6C8C55225B931F008C1DA1 /* AirportsViewModel.swift */; };
 		3FBB64CD225234C900928A85 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FBB64CC225234C900928A85 /* CoreDataManager.swift */; };
 		3FC5F2D4224CF2DD003D475B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FC5F2D3224CF2DD003D475B /* AppDelegate.swift */; };
-		3FC5F2D6224CF2DD003D475B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FC5F2D5224CF2DD003D475B /* ViewController.swift */; };
 		3FC5F2D9224CF2DD003D475B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3FC5F2D7224CF2DD003D475B /* Main.storyboard */; };
 		3FC5F2DC224CF2DD003D475B /* AirportShedule.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 3FC5F2DA224CF2DD003D475B /* AirportShedule.xcdatamodeld */; };
 		3FC5F2DE224CF2DE003D475B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3FC5F2DD224CF2DE003D475B /* Assets.xcassets */; };
@@ -17,11 +18,11 @@
 		3FC5F2EC224CF2DE003D475B /* AirportSheduleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FC5F2EB224CF2DE003D475B /* AirportSheduleTests.swift */; };
 		3FC5F300224CF461003D475B /* TimetableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FC5F2FF224CF461003D475B /* TimetableViewController.swift */; };
 		3FC5F302224CF4D3003D475B /* TimetableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FC5F301224CF4D3003D475B /* TimetableViewCell.swift */; };
-		3FC5F304224CF7A5003D475B /* FlightInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FC5F303224CF7A5003D475B /* FlightInfo.swift */; };
+		3FC5F304224CF7A5003D475B /* AirportInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FC5F303224CF7A5003D475B /* AirportInfo.swift */; };
 		3FC5F306224CF7AA003D475B /* HTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FC5F305224CF7AA003D475B /* HTTPClient.swift */; };
-		3FC5F308224CF7B1003D475B /* Parser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FC5F307224CF7B1003D475B /* Parser.swift */; };
 		3FEDAA442255F2B0001BD26F /* AirportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FEDAA432255F2B0001BD26F /* AirportService.swift */; };
 		3FF7FA2B2254F124006F02BD /* TableViewSectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FF7FA2A2254F124006F02BD /* TableViewSectionCell.swift */; };
+		C99AD6DC10F830043B7C6D69 /* Pods_AirportShedule.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D9127947562F759DFAA92F18 /* Pods_AirportShedule.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -35,10 +36,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3F6C8C52225B92B4008C1DA1 /* CommonFlightInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonFlightInfo.swift; sourceTree = "<group>"; };
+		3F6C8C55225B931F008C1DA1 /* AirportsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AirportsViewModel.swift; sourceTree = "<group>"; };
 		3FBB64CC225234C900928A85 /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
 		3FC5F2D0224CF2DD003D475B /* AirportShedule.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AirportShedule.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3FC5F2D3224CF2DD003D475B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		3FC5F2D5224CF2DD003D475B /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		3FC5F2D8224CF2DD003D475B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		3FC5F2DB224CF2DD003D475B /* AirportShedule.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = AirportShedule.xcdatamodel; sourceTree = "<group>"; };
 		3FC5F2DD224CF2DE003D475B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -49,11 +51,13 @@
 		3FC5F2ED224CF2DE003D475B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3FC5F2FF224CF461003D475B /* TimetableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimetableViewController.swift; sourceTree = "<group>"; };
 		3FC5F301224CF4D3003D475B /* TimetableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimetableViewCell.swift; sourceTree = "<group>"; };
-		3FC5F303224CF7A5003D475B /* FlightInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlightInfo.swift; sourceTree = "<group>"; };
+		3FC5F303224CF7A5003D475B /* AirportInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AirportInfo.swift; sourceTree = "<group>"; };
 		3FC5F305224CF7AA003D475B /* HTTPClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTTPClient.swift; sourceTree = "<group>"; };
-		3FC5F307224CF7B1003D475B /* Parser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Parser.swift; sourceTree = "<group>"; };
 		3FEDAA432255F2B0001BD26F /* AirportService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AirportService.swift; sourceTree = "<group>"; };
 		3FF7FA2A2254F124006F02BD /* TableViewSectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewSectionCell.swift; sourceTree = "<group>"; };
+		929C9C0D0CB7F1C4DEA9A833 /* Pods-AirportShedule.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AirportShedule.debug.xcconfig"; path = "Target Support Files/Pods-AirportShedule/Pods-AirportShedule.debug.xcconfig"; sourceTree = "<group>"; };
+		D9127947562F759DFAA92F18 /* Pods_AirportShedule.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AirportShedule.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		DDE5B27A73878C4E8C079E15 /* Pods-AirportShedule.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AirportShedule.release.xcconfig"; path = "Target Support Files/Pods-AirportShedule/Pods-AirportShedule.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -61,6 +65,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C99AD6DC10F830043B7C6D69 /* Pods_AirportShedule.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -74,12 +79,31 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2526645A3596AFD7225B0F67 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				929C9C0D0CB7F1C4DEA9A833 /* Pods-AirportShedule.debug.xcconfig */,
+				DDE5B27A73878C4E8C079E15 /* Pods-AirportShedule.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		3F6C8C54225B92F5008C1DA1 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				3F6C8C55225B931F008C1DA1 /* AirportsViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
 		3FC5F2C7224CF2DD003D475B = {
 			isa = PBXGroup;
 			children = (
 				3FC5F2D2224CF2DD003D475B /* AirportShedule */,
 				3FC5F2EA224CF2DE003D475B /* AirportSheduleTests */,
 				3FC5F2D1224CF2DD003D475B /* Products */,
+				2526645A3596AFD7225B0F67 /* Pods */,
+				D5A05C09EF170B3187AC91BD /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -95,16 +119,16 @@
 		3FC5F2D2224CF2DD003D475B /* AirportShedule */ = {
 			isa = PBXGroup;
 			children = (
-				3FC5F2F8224CF35D003D475B /* controller */,
-				3FC5F2F7224CF356003D475B /* view */,
-				3FC5F2F6224CF349003D475B /* model */,
+				3FC5F2F7224CF356003D475B /* View */,
+				3F6C8C54225B92F5008C1DA1 /* ViewModel */,
+				3FC5F2F6224CF349003D475B /* Model */,
 				3FC5F2D3224CF2DD003D475B /* AppDelegate.swift */,
-				3FC5F2D5224CF2DD003D475B /* ViewController.swift */,
+				3FBB64CC225234C900928A85 /* CoreDataManager.swift */,
+				3FC5F305224CF7AA003D475B /* HTTPClient.swift */,
 				3FC5F2DD224CF2DE003D475B /* Assets.xcassets */,
 				3FC5F2DF224CF2DE003D475B /* LaunchScreen.storyboard */,
 				3FC5F2E2224CF2DE003D475B /* Info.plist */,
 				3FC5F2DA224CF2DD003D475B /* AirportShedule.xcdatamodeld */,
-				3FBB64CC225234C900928A85 /* CoreDataManager.swift */,
 			);
 			path = AirportShedule;
 			sourceTree = "<group>";
@@ -118,33 +142,33 @@
 			path = AirportSheduleTests;
 			sourceTree = "<group>";
 		};
-		3FC5F2F6224CF349003D475B /* model */ = {
+		3FC5F2F6224CF349003D475B /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				3FC5F307224CF7B1003D475B /* Parser.swift */,
-				3FC5F305224CF7AA003D475B /* HTTPClient.swift */,
-				3FC5F303224CF7A5003D475B /* FlightInfo.swift */,
+				3FC5F303224CF7A5003D475B /* AirportInfo.swift */,
+				3F6C8C52225B92B4008C1DA1 /* CommonFlightInfo.swift */,
 				3FEDAA432255F2B0001BD26F /* AirportService.swift */,
 			);
-			path = model;
+			path = Model;
 			sourceTree = "<group>";
 		};
-		3FC5F2F7224CF356003D475B /* view */ = {
+		3FC5F2F7224CF356003D475B /* View */ = {
 			isa = PBXGroup;
 			children = (
 				3FC5F2D7224CF2DD003D475B /* Main.storyboard */,
 				3FC5F301224CF4D3003D475B /* TimetableViewCell.swift */,
 				3FF7FA2A2254F124006F02BD /* TableViewSectionCell.swift */,
-			);
-			path = view;
-			sourceTree = "<group>";
-		};
-		3FC5F2F8224CF35D003D475B /* controller */ = {
-			isa = PBXGroup;
-			children = (
 				3FC5F2FF224CF461003D475B /* TimetableViewController.swift */,
 			);
-			path = controller;
+			path = View;
+			sourceTree = "<group>";
+		};
+		D5A05C09EF170B3187AC91BD /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				D9127947562F759DFAA92F18 /* Pods_AirportShedule.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -154,9 +178,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 3FC5F2F0224CF2DE003D475B /* Build configuration list for PBXNativeTarget "AirportShedule" */;
 			buildPhases = (
+				8E702908CB6714232BD01CEC /* [CP] Check Pods Manifest.lock */,
 				3FC5F2CC224CF2DD003D475B /* Sources */,
 				3FC5F2CD224CF2DD003D475B /* Frameworks */,
 				3FC5F2CE224CF2DD003D475B /* Resources */,
+				3F6C8C51225B8D03008C1DA1 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -243,17 +269,58 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		3F6C8C51225B8D03008C1DA1 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/SwiftLint/swiftlint\"\n";
+		};
+		8E702908CB6714232BD01CEC /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-AirportShedule-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		3FC5F2CC224CF2DD003D475B /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3F6C8C53225B92B4008C1DA1 /* CommonFlightInfo.swift in Sources */,
 				3FC5F300224CF461003D475B /* TimetableViewController.swift in Sources */,
-				3FC5F2D6224CF2DD003D475B /* ViewController.swift in Sources */,
 				3FC5F302224CF4D3003D475B /* TimetableViewCell.swift in Sources */,
 				3FC5F306224CF7AA003D475B /* HTTPClient.swift in Sources */,
-				3FC5F308224CF7B1003D475B /* Parser.swift in Sources */,
-				3FC5F304224CF7A5003D475B /* FlightInfo.swift in Sources */,
+				3F6C8C56225B931F008C1DA1 /* AirportsViewModel.swift in Sources */,
+				3FC5F304224CF7A5003D475B /* AirportInfo.swift in Sources */,
 				3FBB64CD225234C900928A85 /* CoreDataManager.swift in Sources */,
 				3FEDAA442255F2B0001BD26F /* AirportService.swift in Sources */,
 				3FC5F2DC224CF2DD003D475B /* AirportShedule.xcdatamodeld in Sources */,
@@ -418,15 +485,17 @@
 		};
 		3FC5F2F1224CF2DE003D475B /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 929C9C0D0CB7F1C4DEA9A833 /* Pods-AirportShedule.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = AirportShedule/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "-23.AirportShedule";
+				PRODUCT_BUNDLE_IDENTIFIER = com.itechart.AirportShedule;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -435,15 +504,17 @@
 		};
 		3FC5F2F2224CF2DE003D475B /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = DDE5B27A73878C4E8C079E15 /* Pods-AirportShedule.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = AirportShedule/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "-23.AirportShedule";
+				PRODUCT_BUNDLE_IDENTIFIER = com.itechart.AirportShedule;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
