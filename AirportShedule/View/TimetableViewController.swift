@@ -10,7 +10,7 @@ import UIKit
 
 class SheduleTableViewController: UITableViewController {
 
-    let viewModel = AirportsViewModel()
+    let viewModel = AirportsViewModel(appDelegate: UIApplication.shared.delegate as? AppDelegate ?? AppDelegate()) // TODO:- fix the force cast
 
     override func viewDidLoad() {
         super.viewDidLoad()

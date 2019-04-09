@@ -13,20 +13,23 @@ protocol AirportsViewModelDelegate: class {
 }
 
 class AirportsViewModel {
+    
     weak var delegate: AirportsViewModelDelegate?
+    var data: [SheduleInfoToDisplay]
+    private let httpClient: HTTPClient
+    private let coreDataManager: CoreDataManager
     
-    var data = [SheduleInfoToDisplay]()
-    
-    private let httpClient = HTTPClient()
+    init(appDelegate: AppDelegate) {
+        coreDataManager = CoreDataManager(appDelegate: appDelegate)
+        
+        data = [SheduleInfoToDisplay]()
+        httpClient = HTTPClient()
+    }
     
     func getData() {
-
-        httpClient.getAirportInfo { airports, error in
-            self.data = self.prepareToDisplay(airports)
-            self.delegate?.receiveddData()
-        }
+        coreDataManager.delegate = self
+        coreDataManager.loadDataFromDB()
         
-        // TODO: save to core data
     }
     
     private func prepareToDisplay(_ airports: [AirportInfo]) -> [SheduleInfoToDisplay] {
@@ -35,8 +38,7 @@ class AirportsViewModel {
                 let attributes = airports.value.map({ airport -> Attributs in
                     return Attributs(city: airport.city, airportName: airport.name, code: airport.code)
                 })
-                
-                let displayData = SheduleInfoToDisplay(isOpen: false, sectionName: airports.key, sectionObject: attributes)
+                let displayData = SheduleInfoToDisplay(sectionName: airports.key, sectionObject: attributes)
                 result.append(displayData)
             })
             .sorted(by: { $0.sectionName > $1.sectionName })
@@ -46,7 +48,6 @@ class AirportsViewModel {
 }
 
 struct SheduleInfoToDisplay {
-    var isOpen: Bool
     var sectionName: String
     var sectionObject: [Attributs]
     
@@ -56,4 +57,19 @@ struct Attributs {
     var city: String?
     var airportName: String?
     var code: String
+}
+
+extension AirportsViewModel: DataCoreManagerDelegate{
+    func recievedData() {
+        self.data = prepareToDisplay(coreDataManager.downloadedData)
+        
+        if self.data.isEmpty {
+            httpClient.getAirportInfo {airports, _ in
+                self.coreDataManager.saveAirports(airports: airports)
+                self.data = self.prepareToDisplay(airports)
+            }
+            
+        }
+        self.delegate?.receiveddData()
+    }
 }

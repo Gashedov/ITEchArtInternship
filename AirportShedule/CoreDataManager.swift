@@ -9,41 +9,44 @@
 import Foundation
 import CoreData
 
+protocol DataCoreManagerDelegate : class{
+    func recievedData()
+}
+
 class CoreDataManager {
-
+    
+    weak var delegate: DataCoreManagerDelegate?
     private let appDelegate: AppDelegate
-
+    var downloadedData = [AirportInfo]()
+    
     init(appDelegate: AppDelegate) {
         self.appDelegate = appDelegate
     }
 
-    func loadDataFromDB() -> [SheduleInfoToDisplay] {
+    func loadDataFromDB() {
 
         print("load Data from DB")
-
-        var downloadedAirports = [SheduleInfoToDisplay]()
         let context = appDelegate.persistentContainer.newBackgroundContext() //viewContext
 
         appDelegate.persistentContainer.performBackgroundTask { _ in
             do {
-                let request: NSFetchRequest<Country> = Country.fetchRequest()
+                let request: NSFetchRequest<Airport> = Airport.fetchRequest()
 
                 let airportResult = try context.fetch(request)
                 for airport in airportResult {
-                    downloadedAirports.append(SheduleInfoToDisplay(isOpen: false, sectionName: airport.name ?? "", sectionObject: self.converteToAttributes(set: airport.airports ?? NSSet())))
+                    self.downloadedData.append(AirportInfo(country: airport.country ?? "", name: airport.name ?? "", city: airport.city ?? "", code: airport.code ?? ""))
                 }
-
+                
             } catch let error as NSError {
                 print("Could not save \(error)")
             }
             print("Data loaded")
+            self.delegate?.recievedData()
             
         }
-        
-        return downloadedAirports
     }
 
-    func saveAirports(airports: [SheduleInfoToDisplay]) {
+    func saveAirports(airports: [AirportInfo]) {
         let backContext = appDelegate.persistentContainer.newBackgroundContext()
 
         appDelegate.persistentContainer.performBackgroundTask { (context) in
@@ -53,46 +56,28 @@ class CoreDataManager {
 
     // MARK: Private Methods
 
-//    private func backgroundSaveAirports(airports: [SheduleInfoToDisplay], context: NSManagedObjectContext) {
-//
-//        context.perform {
-//            print("Start save data to DB")
-//
-//            for airport in airports {
-//                guard let cdCountry = NSEntityDescription.insertNewObject(forEntityName: "Country", into: context) as? Country else {
-//                    return
-//                }
-//
-//                cdCountry.name = airport.sectionName
-//
-//                airport.sectionObject
-//                    .map { attrs -> Airport in
-//                        let airport = NSEntityDescription.insertNewObject(forEntityName: "Airport", into: context) as? Airport
-//                        airport.city = attrs.city
-//                        airport.code = attrs.code
-//                        airport.name = attrs.airportName
-//                        return airport
-//                    }
-//                    .forEach(cdCountry.addToAirports)
-//                do {
-//                    try context.save()
-//                } catch let error as NSError {
-//                    print("Could not save \(error)")
-//                }
-//            }
-//
-//            print("Data saved")
-//        }
-//    }
+    private func backgroundSaveAirports(airports: [AirportInfo], context: NSManagedObjectContext) {
 
-    private func converteToAttributes(set: NSSet) -> [Attributs] {
-        var attributs = [Attributs]()
+        context.perform {
+            print("Start save data to DB")
 
-        for value in set {
-            if let airport = value as? Airport {
-            attributs.append(Attributs(city: airport.city, airportName: airport.name, code: airport.code ?? "" ))
+            for airport in airports {
+                guard let coreDataAirport = NSEntityDescription.insertNewObject(forEntityName: "Airport", into: context) as? Airport else {
+                    return
+                }
+                coreDataAirport.country = airport.country
+                coreDataAirport.city = airport.city
+                coreDataAirport.code = airport.code
+                coreDataAirport.name = airport.name
+                
+                do {
+                    try context.save()
+                } catch let error as NSError {
+                    print("Could not save \(error)")
+                }
             }
+
+            print("Data saved")
         }
-        return attributs
-    }
+ }
 }
