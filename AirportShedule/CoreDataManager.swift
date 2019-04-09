@@ -9,40 +9,34 @@
 import Foundation
 import CoreData
 
-protocol DataCoreManagerDelegate : class{
-    func recievedData()
-}
-
 class CoreDataManager {
     
-    weak var delegate: DataCoreManagerDelegate?
     private let appDelegate: AppDelegate
-    var downloadedData = [AirportInfo]()
     
     init(appDelegate: AppDelegate) {
         self.appDelegate = appDelegate
     }
 
-    func loadDataFromDB() {
-
+    func loadDataFromDB(callback: @escaping ([AirportInfo], Error?) -> Void) {
         print("load Data from DB")
+        
         let context = appDelegate.persistentContainer.newBackgroundContext() //viewContext
 
         appDelegate.persistentContainer.performBackgroundTask { _ in
+            var downloadedData = [AirportInfo]()
             do {
                 let request: NSFetchRequest<Airport> = Airport.fetchRequest()
-
                 let airportResult = try context.fetch(request)
                 for airport in airportResult {
-                    self.downloadedData.append(AirportInfo(country: airport.country ?? "", name: airport.name ?? "", city: airport.city ?? "", code: airport.code ?? ""))
+                    downloadedData.append(AirportInfo(country: airport.country ?? "", name: airport.name ?? "", city: airport.city ?? "", code: airport.code ?? ""))
                 }
-                
             } catch let error as NSError {
                 print("Could not save \(error)")
             }
             print("Data loaded")
-            self.delegate?.recievedData()
-            
+            DispatchQueue.main.async {
+                callback(downloadedData, nil)
+            }
         }
     }
 
@@ -69,7 +63,6 @@ class CoreDataManager {
                 coreDataAirport.city = airport.city
                 coreDataAirport.code = airport.code
                 coreDataAirport.name = airport.name
-                
                 do {
                     try context.save()
                 } catch let error as NSError {

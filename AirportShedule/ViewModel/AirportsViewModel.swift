@@ -13,7 +13,6 @@ protocol AirportsViewModelDelegate: class {
 }
 
 class AirportsViewModel {
-    
     weak var delegate: AirportsViewModelDelegate?
     var data: [SheduleInfoToDisplay]
     private let httpClient: HTTPClient
@@ -21,14 +20,27 @@ class AirportsViewModel {
     
     init(appDelegate: AppDelegate) {
         coreDataManager = CoreDataManager(appDelegate: appDelegate)
-        
         data = [SheduleInfoToDisplay]()
         httpClient = HTTPClient()
     }
     
     func getData() {
-        coreDataManager.delegate = self
-        coreDataManager.loadDataFromDB()
+        coreDataManager.loadDataFromDB { data, _ in
+            self.data = self.prepareToDisplay(data)
+        }
+        
+        if self.data.isEmpty {
+            httpClient.getAirportInfo {airports, _ in
+                self.data = self.prepareToDisplay(airports)
+                self.coreDataManager.saveAirports(airports: airports)
+                DispatchQueue.main.async {
+                    self.delegate?.receiveddData()
+                }
+                
+            }
+            
+        }
+        
         
     }
     
@@ -41,8 +53,7 @@ class AirportsViewModel {
                 let displayData = SheduleInfoToDisplay(sectionName: airports.key, sectionObject: attributes)
                 result.append(displayData)
             })
-            .sorted(by: { $0.sectionName > $1.sectionName })
-        
+            .sorted(by: { $0.sectionName < $1.sectionName })
         return data
     }
 }
@@ -50,26 +61,10 @@ class AirportsViewModel {
 struct SheduleInfoToDisplay {
     var sectionName: String
     var sectionObject: [Attributs]
-    
 }
 
 struct Attributs {
     var city: String?
     var airportName: String?
     var code: String
-}
-
-extension AirportsViewModel: DataCoreManagerDelegate{
-    func recievedData() {
-        self.data = prepareToDisplay(coreDataManager.downloadedData)
-        
-        if self.data.isEmpty {
-            httpClient.getAirportInfo {airports, _ in
-                self.coreDataManager.saveAirports(airports: airports)
-                self.data = self.prepareToDisplay(airports)
-            }
-            
-        }
-        self.delegate?.receiveddData()
-    }
 }
