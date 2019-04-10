@@ -1,14 +1,16 @@
 //
-//  TableViewSectionCell.swift
+//  UserHeaderTableViewCell.swift
 //  AirportShedule
 //
-//  Created by student on 4/3/19.
+//  Created by student on 4/10/19.
 //  Copyright © 2019 TyomaProduction. All rights reserved.
 //
 
 import UIKit
 
-class TableViewSectionCell: UITableViewCell {
+
+class UserHeaderTableViewCell: UITableViewCell {
+    
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -17,8 +19,7 @@ class TableViewSectionCell: UITableViewCell {
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
+   
         // Configure the view for the selected state
     }
-
 }

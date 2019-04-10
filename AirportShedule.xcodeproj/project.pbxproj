@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3F43D0FD225E062C00A91962 /* UserHeaderTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F43D0FC225E062C00A91962 /* UserHeaderTableViewCell.swift */; };
 		3F6C8C53225B92B4008C1DA1 /* CommonFlightInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F6C8C52225B92B4008C1DA1 /* CommonFlightInfo.swift */; };
 		3F6C8C56225B931F008C1DA1 /* AirportsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F6C8C55225B931F008C1DA1 /* AirportsViewModel.swift */; };
 		3FBB64CD225234C900928A85 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FBB64CC225234C900928A85 /* CoreDataManager.swift */; };
@@ -21,7 +22,6 @@
 		3FC5F304224CF7A5003D475B /* AirportInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FC5F303224CF7A5003D475B /* AirportInfo.swift */; };
 		3FC5F306224CF7AA003D475B /* HTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FC5F305224CF7AA003D475B /* HTTPClient.swift */; };
 		3FEDAA442255F2B0001BD26F /* AirportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FEDAA432255F2B0001BD26F /* AirportService.swift */; };
-		3FF7FA2B2254F124006F02BD /* TableViewSectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FF7FA2A2254F124006F02BD /* TableViewSectionCell.swift */; };
 		C99AD6DC10F830043B7C6D69 /* Pods_AirportShedule.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D9127947562F759DFAA92F18 /* Pods_AirportShedule.framework */; };
 /* End PBXBuildFile section */
 
@@ -36,6 +36,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3F43D0FC225E062C00A91962 /* UserHeaderTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserHeaderTableViewCell.swift; sourceTree = "<group>"; };
 		3F6C8C52225B92B4008C1DA1 /* CommonFlightInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonFlightInfo.swift; sourceTree = "<group>"; };
 		3F6C8C55225B931F008C1DA1 /* AirportsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AirportsViewModel.swift; sourceTree = "<group>"; };
 		3FBB64CC225234C900928A85 /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
@@ -54,7 +55,6 @@
 		3FC5F303224CF7A5003D475B /* AirportInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AirportInfo.swift; sourceTree = "<group>"; };
 		3FC5F305224CF7AA003D475B /* HTTPClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTTPClient.swift; sourceTree = "<group>"; };
 		3FEDAA432255F2B0001BD26F /* AirportService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AirportService.swift; sourceTree = "<group>"; };
-		3FF7FA2A2254F124006F02BD /* TableViewSectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewSectionCell.swift; sourceTree = "<group>"; };
 		929C9C0D0CB7F1C4DEA9A833 /* Pods-AirportShedule.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AirportShedule.debug.xcconfig"; path = "Target Support Files/Pods-AirportShedule/Pods-AirportShedule.debug.xcconfig"; sourceTree = "<group>"; };
 		D9127947562F759DFAA92F18 /* Pods_AirportShedule.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AirportShedule.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DDE5B27A73878C4E8C079E15 /* Pods-AirportShedule.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AirportShedule.release.xcconfig"; path = "Target Support Files/Pods-AirportShedule/Pods-AirportShedule.release.xcconfig"; sourceTree = "<group>"; };
@@ -157,8 +157,8 @@
 			children = (
 				3FC5F2D7224CF2DD003D475B /* Main.storyboard */,
 				3FC5F301224CF4D3003D475B /* TimetableViewCell.swift */,
-				3FF7FA2A2254F124006F02BD /* TableViewSectionCell.swift */,
 				3FC5F2FF224CF461003D475B /* TimetableViewController.swift */,
+				3F43D0FC225E062C00A91962 /* UserHeaderTableViewCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -318,6 +318,7 @@
 				3F6C8C53225B92B4008C1DA1 /* CommonFlightInfo.swift in Sources */,
 				3FC5F300224CF461003D475B /* TimetableViewController.swift in Sources */,
 				3FC5F302224CF4D3003D475B /* TimetableViewCell.swift in Sources */,
+				3F43D0FD225E062C00A91962 /* UserHeaderTableViewCell.swift in Sources */,
 				3FC5F306224CF7AA003D475B /* HTTPClient.swift in Sources */,
 				3F6C8C56225B931F008C1DA1 /* AirportsViewModel.swift in Sources */,
 				3FC5F304224CF7A5003D475B /* AirportInfo.swift in Sources */,
@@ -325,7 +326,6 @@
 				3FEDAA442255F2B0001BD26F /* AirportService.swift in Sources */,
 				3FC5F2DC224CF2DD003D475B /* AirportShedule.xcdatamodeld in Sources */,
 				3FC5F2D4224CF2DD003D475B /* AppDelegate.swift in Sources */,
-				3FF7FA2B2254F124006F02BD /* TableViewSectionCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

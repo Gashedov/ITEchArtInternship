@@ -36,12 +36,8 @@ class AirportsViewModel {
                 DispatchQueue.main.async {
                     self.delegate?.receiveddData()
                 }
-                
             }
-            
         }
-        
-        
     }
     
     private func prepareToDisplay(_ airports: [AirportInfo]) -> [SheduleInfoToDisplay] {
@@ -50,7 +46,7 @@ class AirportsViewModel {
                 let attributes = airports.value.map({ airport -> Attributs in
                     return Attributs(city: airport.city, airportName: airport.name, code: airport.code)
                 })
-                let displayData = SheduleInfoToDisplay(sectionName: airports.key, sectionObject: attributes)
+                let displayData = SheduleInfoToDisplay(isOpen: false, sectionName: airports.key, sectionObject: attributes)
                 result.append(displayData)
             })
             .sorted(by: { $0.sectionName < $1.sectionName })
@@ -59,6 +55,7 @@ class AirportsViewModel {
 }
 
 struct SheduleInfoToDisplay {
+    var isOpen: Bool
     var sectionName: String
     var sectionObject: [Attributs]
 }
