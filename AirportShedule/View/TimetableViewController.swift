@@ -14,7 +14,6 @@ class SheduleTableViewController: UITableViewController {
     private let searchController = UISearchController(searchResultsController: nil)
     
     var searchingCountry = [SheduleInfoToDisplay]()
-    var searching = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,28 +26,24 @@ class SheduleTableViewController: UITableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         viewModel.getData()
+        
     }
 
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        if searching {
             return searchingCountry.count
-        }else {
-        return viewModel.data.count
-        }
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if viewModel.data[section].isOpen {
+        if searchingCountry[section].isOpen {
             return viewModel.data[section].sectionObject.count
         } else {
             return 0
         }
     }
 
-    
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let button = UIButton(type: .system)
         button.setTitle(viewModel.data[section].sectionName, for: .normal)
@@ -99,6 +94,7 @@ class SheduleTableViewController: UITableViewController {
 
 extension SheduleTableViewController: AirportsViewModelDelegate {
     func receiveddData() {
+        searchingCountry = viewModel.data
         tableView.reloadData()
         print(viewModel.data.isEmpty ? "is empty" : "data recieved")
     }
@@ -108,8 +104,9 @@ extension SheduleTableViewController: UISearchResultsUpdating {
     // calls every time you interact with search bar
     func updateSearchResults(for searchController: UISearchController) {
         if !searchController.searchBar.text!.isEmpty {
-            searchingCountry = viewModel.data.filter { $0.sectionName.lowercased().contains(searchController.searchBar.text!.lowercased()) }
-            searching = true
+            searchingCountry = viewModel.data.filter({$0.sectionName.prefix(searchController.searchBar.text!.count) == searchController.searchBar.text!})
+        } else {
+            searchingCountry = viewModel.data
         }
         tableView.reloadData()
     }
