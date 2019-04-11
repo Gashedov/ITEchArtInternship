@@ -14,7 +14,9 @@ protocol AirportsViewModelDelegate: class {
 
 class AirportsViewModel {
     weak var delegate: AirportsViewModelDelegate?
-    var data: [SheduleInfoToDisplay]
+    
+   var data: [SheduleInfoToDisplay]
+    
     private let httpClient: HTTPClient
     private let coreDataManager: CoreDataManager
     
@@ -25,19 +27,42 @@ class AirportsViewModel {
     }
     
     func getData() {
-        coreDataManager.loadDataFromDB { data, _ in
+        getDataFromDataBase(success: { data in
             self.data = self.prepareToDisplay(data)
-        }
+            print(self.data[0].sectionObject.count)
+            self.delegate?.receiveddData()
+        }, failure: { error in
+            print("Error: \(String(describing: error))")
+        })
         
-        if self.data.isEmpty {
-            httpClient.getAirportInfo {airports, _ in
-                self.data = self.prepareToDisplay(airports)
-                self.coreDataManager.saveAirports(airports: airports)
-                DispatchQueue.main.async {
-                    self.delegate?.receiveddData()
-                }
+        self.getDataFromNetwork(success: { data in
+            if self.data.isEmpty {
+                self.data = self.prepareToDisplay(data)
+                self.delegate?.receiveddData()
             }
+            
+            self.saveDataToDataBase(data)
+        }, failure: { error in
+            print("Error: \(String(describing: error))")
+        })
+    }
+    
+    private func getDataFromDataBase(success: @escaping (_ data: [AirportInfo]) -> Void,
+                                     failure: @escaping (_ error: Error?) -> Void) {
+        coreDataManager.loadDataFromDB { data, error in
+            data.isEmpty ? failure(error) : success(data)
         }
+    }
+    
+    private func getDataFromNetwork(success: @escaping (_ data: [AirportInfo]) -> Void,
+                                    failure: @escaping (_ error: Error?) -> Void) {
+        httpClient.getAirportInfo { airports, error in
+            error != nil ? failure(error) : success(airports)
+        }
+    }
+    
+    private func saveDataToDataBase(_ data: [AirportInfo]) {
+        coreDataManager.saveAirports(airports: data)
     }
     
     private func prepareToDisplay(_ airports: [AirportInfo]) -> [SheduleInfoToDisplay] {

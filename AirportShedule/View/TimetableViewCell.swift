@@ -10,6 +10,10 @@ import UIKit
 
 class TimetableViewCell: UITableViewCell {
 
+    @IBOutlet weak var codeLabel: UILabel!
+    @IBOutlet weak var cityLabel: UILabel!
+    @IBOutlet weak var nameLabel: UILabel!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -19,6 +23,12 @@ class TimetableViewCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state
+    }
+    
+    func setValues(code: String, city: String, name: String){
+        codeLabel.text = code
+        cityLabel.text = city
+        nameLabel.text = name
     }
 
 }

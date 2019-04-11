@@ -44,17 +44,31 @@ class CoreDataManager {
         let backContext = appDelegate.persistentContainer.newBackgroundContext()
 
         appDelegate.persistentContainer.performBackgroundTask { (context) in
+            self.deleteAllData(context: backContext)
             self.backgroundSaveAirports(airports: airports, context: backContext)
         }
     }
 
     // MARK: Private Methods
 
+    private func deleteAllData(context: NSManagedObjectContext) {
+        do {
+            let request: NSFetchRequest<Airport> = Airport.fetchRequest()
+            request.returnsObjectsAsFaults = false
+            let results = try context.fetch(request)
+            for object in results {
+                context.delete(object)
+            }
+            print("objects deleted ")
+        } catch let error {
+            print("Detele all data error :", error)
+        }
+    }
+    
     private func backgroundSaveAirports(airports: [AirportInfo], context: NSManagedObjectContext) {
 
         context.perform {
             print("Start save data to DB")
-
             for airport in airports {
                 guard let coreDataAirport = NSEntityDescription.insertNewObject(forEntityName: "Airport", into: context) as? Airport else {
                     return
@@ -63,13 +77,12 @@ class CoreDataManager {
                 coreDataAirport.city = airport.city
                 coreDataAirport.code = airport.code
                 coreDataAirport.name = airport.name
-                do {
-                    try context.save()
-                } catch let error as NSError {
-                    print("Could not save \(error)")
-                }
             }
-
+            do {
+                try context.save()
+            } catch let error as NSError {
+                print("Could not save \(error)")
+            }
             print("Data saved")
         }
  }

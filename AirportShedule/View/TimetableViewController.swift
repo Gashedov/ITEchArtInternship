@@ -9,13 +9,23 @@
 import UIKit
 
 class SheduleTableViewController: UITableViewController {
-
-    let viewModel = AirportsViewModel(appDelegate: UIApplication.shared.delegate as? AppDelegate ?? AppDelegate())
+    
+    private let viewModel = AirportsViewModel(appDelegate: UIApplication.shared.delegate as? AppDelegate ?? AppDelegate())
+    private let searchController = UISearchController(searchResultsController: nil)
+    
+    var searchingCountry = [SheduleInfoToDisplay]()
+    var searching = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         viewModel.delegate = self
+        searchController.searchResultsUpdater = self
+        searchController.dimsBackgroundDuringPresentation = false
+        definesPresentationContext = true
+        tableView.tableHeaderView = searchController.searchBar
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
         viewModel.getData()
     }
 
@@ -23,7 +33,11 @@ class SheduleTableViewController: UITableViewController {
 
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
+        if searching {
+            return searchingCountry.count
+        }else {
         return viewModel.data.count
+        }
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -34,9 +48,6 @@ class SheduleTableViewController: UITableViewController {
         }
     }
 
-    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return viewModel.data[section].sectionName
-    }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let button = UIButton(type: .system)
@@ -51,10 +62,9 @@ class SheduleTableViewController: UITableViewController {
     }
     
     @objc func hendleExpandClose(button: UIButton) {
-        
         let section = button.tag
         var indexPaths = [IndexPath]()
-        for row in viewModel.data[section].sectionObject.indices{
+        for row in viewModel.data[section].sectionObject.indices {
             let indexPath = IndexPath(row: row, section: section)
             indexPaths.append(indexPath)
         }
@@ -73,10 +83,11 @@ class SheduleTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: "SheduleTableViewCell") as? TimetableViewCell else {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: "TimetableViewCell") as? TimetableViewCell else {
                 return UITableViewCell()
             }
-            cell.backgroundColor = UIColor.gray
+            let airport = viewModel.data[indexPath.section].sectionObject[indexPath.row]
+            cell.setValues(code: airport.code, city: airport.city ?? "", name: airport.airportName ?? "")
         
             return cell
     }
@@ -89,8 +100,18 @@ class SheduleTableViewController: UITableViewController {
 extension SheduleTableViewController: AirportsViewModelDelegate {
     func receiveddData() {
         tableView.reloadData()
-        print(viewModel.data)
+        print(viewModel.data.isEmpty ? "is empty" : "data recieved")
     }
 }
 
+extension SheduleTableViewController: UISearchResultsUpdating {
+    // calls every time you interact with search bar
+    func updateSearchResults(for searchController: UISearchController) {
+        if !searchController.searchBar.text!.isEmpty {
+            searchingCountry = viewModel.data.filter { $0.sectionName.lowercased().contains(searchController.searchBar.text!.lowercased()) }
+            searching = true
+        }
+        tableView.reloadData()
+    }
+}
 
