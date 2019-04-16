@@ -8,31 +8,19 @@
 
 import Foundation
 
-struct CommonFlightInfo: Decodable {
-    var arrivalAirportName: String?
-    var departureAirportName: String?
+struct RawFlightInfo {
+    var arrivalAirportCode: String?
+    var departureAirportCode: String?
     var arrivalTime: Int?
     var departureTime: Int?
-    
+}
+
+extension RawFlightInfo: Decodable {
     enum CodingKeys: String, CodingKey {
-        case arrivalAirportName = "estArrivalAirport"
-        case departureAirportName = "estDepartureAirport"
-        case arrivalTime = "lastSeen"
+        case arrivalAirportCode = "lastSeen" //time since the begining of the era
+        case departureAirportCode = "estDepartureAirport" // code "FFDD"
+        case arrivalTime = "estArrivalAirport"
         case departureTime = "firstSeen"
-    }
-    func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(arrivalAirportName, forKey: .arrivalAirportName)
-        try container.encode(departureAirportName, forKey: .departureAirportName)
-        try container.encode(arrivalTime, forKey: .arrivalTime)
-        try container.encode(departureTime, forKey: .departureTime)
-    }
-    init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        arrivalAirportName = try container.decode(String.self, forKey: .arrivalAirportName)
-        departureAirportName = try container.decode(String.self, forKey: .departureAirportName)
-        arrivalTime = try container.decode(Int.self, forKey: .arrivalTime)
-        departureTime = try container.decode(Int.self, forKey: .departureTime)
     }
 }
 

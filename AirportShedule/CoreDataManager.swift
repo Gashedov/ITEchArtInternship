@@ -23,7 +23,7 @@ class CoreDataManager {
         let context = appDelegate.persistentContainer.newBackgroundContext() //viewContext
 
         appDelegate.persistentContainer.performBackgroundTask { _ in
-            var downloadedData = [AirportInfo]()
+            var downloadedData:[AirportInfo] = []
             do {
                 let request: NSFetchRequest<Airport> = Airport.fetchRequest()
                 let airportResult = try context.fetch(request)

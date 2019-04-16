@@ -9,28 +9,30 @@
 import Foundation
 
 protocol AirportsViewModelDelegate: class {
-    func receiveddData()
+    func receivedData()
 }
 
 class AirportsViewModel {
     weak var delegate: AirportsViewModelDelegate?
     
-   var data: [SheduleInfoToDisplay]
+    private var data: [SheduleInfoToDisplay]
+    var dataToDisplay : [SheduleInfoToDisplay]
     
     private let httpClient: HTTPClient
     private let coreDataManager: CoreDataManager
     
     init(appDelegate: AppDelegate) {
         coreDataManager = CoreDataManager(appDelegate: appDelegate)
-        data = [SheduleInfoToDisplay]()
+        data = []
+        dataToDisplay = []
         httpClient = HTTPClient()
     }
     
     func getData() {
         getDataFromDataBase(success: { data in
             self.data = self.prepareToDisplay(data)
-            print(self.data[0].sectionObject.count)
-            self.delegate?.receiveddData()
+            self.dataToDisplay = self.data
+            self.delegate?.receivedData()
         }, failure: { error in
             print("Error: \(String(describing: error))")
         })
@@ -38,7 +40,8 @@ class AirportsViewModel {
         self.getDataFromNetwork(success: { data in
             if self.data.isEmpty {
                 self.data = self.prepareToDisplay(data)
-                self.delegate?.receiveddData()
+                self.dataToDisplay = self.data
+                self.delegate?.receivedData()
             }
             
             self.saveDataToDataBase(data)
@@ -47,17 +50,35 @@ class AirportsViewModel {
         })
     }
     
+    func searchCountry(searchingCountry: String) {
+        if searchingCountry.isEmpty {
+            dataToDisplay = data
+        } else {
+            dataToDisplay = data.filter({$0.airportCountry.prefix(searchingCountry.count) == searchingCountry})
+        }
+        delegate?.receivedData()
+    }
+    
+    //MARK:- Private methods
     private func getDataFromDataBase(success: @escaping (_ data: [AirportInfo]) -> Void,
                                      failure: @escaping (_ error: Error?) -> Void) {
         coreDataManager.loadDataFromDB { data, error in
-            data.isEmpty ? failure(error) : success(data)
+            if data.isEmpty {
+                failure(error)
+                return
+            }
+            success(data)
         }
     }
     
     private func getDataFromNetwork(success: @escaping (_ data: [AirportInfo]) -> Void,
                                     failure: @escaping (_ error: Error?) -> Void) {
         httpClient.getAirportInfo { airports, error in
-            error != nil ? failure(error) : success(airports)
+            if let error = error {
+                failure(error)
+                return
+            }
+            success(airports)
         }
     }
     
@@ -71,22 +92,10 @@ class AirportsViewModel {
                 let attributes = airports.value.map({ airport -> Attributs in
                     return Attributs(city: airport.city, airportName: airport.name, code: airport.code)
                 })
-                let displayData = SheduleInfoToDisplay(isOpen: false, sectionName: airports.key, sectionObject: attributes)
+                let displayData = SheduleInfoToDisplay(isOpen: false, airportCountry: airports.key, airportAttributs: attributes)
                 result.append(displayData)
             })
-            .sorted(by: { $0.sectionName < $1.sectionName })
+            .sorted(by: { $0.airportCountry < $1.airportCountry })
         return data
     }
-}
-
-struct SheduleInfoToDisplay {
-    var isOpen: Bool
-    var sectionName: String
-    var sectionObject: [Attributs]
-}
-
-struct Attributs {
-    var city: String?
-    var airportName: String?
-    var code: String
 }

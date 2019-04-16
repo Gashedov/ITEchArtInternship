@@ -13,7 +13,7 @@ class HTTPClient {
     let baseFlightInfoPath = "https://opensky-network.org/api/flights/departure"
 
     private func parseRequest(requests: [String: String]) -> [URLQueryItem] {
-        var items = [URLQueryItem]()
+        var items: [URLQueryItem] = []
 
         for (key, value) in requests {
             items.append(URLQueryItem(name: key, value: value))
@@ -21,7 +21,7 @@ class HTTPClient {
         return items
     }
 
-    func getCommonFlightInfo (requests: [String: String], callback: @escaping ([CommonFlightInfo], Error?) -> Void) {
+    func getFlightInfo (requests: [String: String], callback: @escaping ([RawFlightInfo], Error?) -> Void) {
 
         var url = URLComponents(string: baseFlightInfoPath)
         url?.queryItems = parseRequest(requests: requests)
@@ -44,7 +44,7 @@ class HTTPClient {
                 return
             }
 
-            let flightInfo = try? JSONDecoder().decode([CommonFlightInfo].self, from: responseData)
+            let flightInfo = try? JSONDecoder().decode([RawFlightInfo].self, from: responseData)
             DispatchQueue.main.async {
                 callback(flightInfo ?? [], nil)
         }

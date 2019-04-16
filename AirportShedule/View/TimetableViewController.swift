@@ -12,8 +12,6 @@ class SheduleTableViewController: UITableViewController {
     
     private let viewModel = AirportsViewModel(appDelegate: UIApplication.shared.delegate as? AppDelegate ?? AppDelegate())
     private let searchController = UISearchController(searchResultsController: nil)
-    
-    var searchingCountry = [SheduleInfoToDisplay]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,12 +31,12 @@ class SheduleTableViewController: UITableViewController {
 
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-            return searchingCountry.count
+            return viewModel.dataToDisplay.count
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if searchingCountry[section].isOpen {
-            return viewModel.data[section].sectionObject.count
+        if viewModel.dataToDisplay[section].isOpen {
+            return viewModel.dataToDisplay[section].airportAttributs.count
         } else {
             return 0
         }
@@ -46,12 +44,13 @@ class SheduleTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let button = UIButton(type: .system)
-        button.setTitle(viewModel.data[section].sectionName, for: .normal)
+        button.setTitle(viewModel.dataToDisplay[section].airportCountry, for: .normal)
         button.setTitleColor(.black, for: .normal)
         button.backgroundColor = .gray
         button.titleLabel?.textAlignment = .left
         button.tag = section
         button.addTarget(self, action: #selector(hendleExpandClose), for: .touchUpInside)
+        
         
         return button
     }
@@ -59,16 +58,16 @@ class SheduleTableViewController: UITableViewController {
     @objc func hendleExpandClose(button: UIButton) {
         let section = button.tag
         var indexPaths = [IndexPath]()
-        for row in viewModel.data[section].sectionObject.indices {
+        for row in viewModel.dataToDisplay[section].airportAttributs.indices {
             let indexPath = IndexPath(row: row, section: section)
             indexPaths.append(indexPath)
         }
         
-        if viewModel.data[section].isOpen {
-            viewModel.data[section].isOpen = false
+        if viewModel.dataToDisplay[section].isOpen {
+            viewModel.dataToDisplay[section].isOpen = false
             tableView.deleteRows(at: indexPaths, with: .none)
         } else {
-            viewModel.data[section].isOpen = true
+            viewModel.dataToDisplay[section].isOpen = true
             tableView.insertRows(at: indexPaths, with: .none)
         }
     }
@@ -81,9 +80,8 @@ class SheduleTableViewController: UITableViewController {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "TimetableViewCell") as? TimetableViewCell else {
                 return UITableViewCell()
             }
-            let airport = viewModel.data[indexPath.section].sectionObject[indexPath.row]
+        let airport = viewModel.dataToDisplay[indexPath.section].airportAttributs[indexPath.row]
             cell.setValues(code: airport.code, city: airport.city ?? "", name: airport.airportName ?? "")
-        
             return cell
     }
     
@@ -93,22 +91,16 @@ class SheduleTableViewController: UITableViewController {
 }
 
 extension SheduleTableViewController: AirportsViewModelDelegate {
-    func receiveddData() {
-        searchingCountry = viewModel.data
+    func receivedData() {
+        //searchingCountry = viewModel.data
         tableView.reloadData()
-        print(viewModel.data.isEmpty ? "is empty" : "data recieved")
+        print(viewModel.dataToDisplay.isEmpty ? "data is empty" : "data updated")
     }
 }
 
 extension SheduleTableViewController: UISearchResultsUpdating {
     // calls every time you interact with search bar
     func updateSearchResults(for searchController: UISearchController) {
-        if !searchController.searchBar.text!.isEmpty {
-            searchingCountry = viewModel.data.filter({$0.sectionName.prefix(searchController.searchBar.text!.count) == searchController.searchBar.text!})
-        } else {
-            searchingCountry = viewModel.data
-        }
-        tableView.reloadData()
+            viewModel.searchCountry(searchingCountry: searchController.searchBar.text!)
     }
 }
-
