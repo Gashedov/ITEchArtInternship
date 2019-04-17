@@ -21,21 +21,24 @@ class HTTPClient {
         return items
     }
 
-    func getFlightInfo (requests: [String: String], callback: @escaping ([RawFlightInfo], Error?) -> Void) {
+    func getFlightInfo (requests: [String: String], success: @escaping ([RawFlightInfo]) -> Void,
+                                                    failure: @escaping (_ error: Error?)-> Void) {
 
-        var url = URLComponents(string: baseFlightInfoPath)
-        url?.queryItems = parseRequest(requests: requests)
+        var urlComponents = URLComponents(string: baseFlightInfoPath)
+        urlComponents?.queryItems = parseRequest(requests: requests)
 
-        let urlRequest = URLRequest(url: (url?.url)!)
+        guard let url = urlComponents?.url! else {
+            return failure(NSError(domain: "", code: 404, userInfo: nil))
+        }
+        
+        let urlRequest = URLRequest(url: url)
 
         let session = URLSession(configuration: .default)
 
-        let task = session.dataTask(with: urlRequest) {
-            (data, _, error) in
+        let task = session.dataTask(with: urlRequest) { (data, _, error) in
 
             guard error == nil else {
-                print("error calling GET on /todos/1")
-                print(error!)
+                failure(error!)
                 return
             }
 
@@ -46,15 +49,16 @@ class HTTPClient {
 
             let flightInfo = try? JSONDecoder().decode([RawFlightInfo].self, from: responseData)
             DispatchQueue.main.async {
-                callback(flightInfo ?? [], nil)
+                success(flightInfo ?? [])
         }
         }
         task.resume()
     }
 
-    func getAirportInfo(callback: @escaping ([AirportInfo], Error?) -> Void) {
+    func getAirportInfo(success: @escaping ([AirportInfo]) -> Void,
+                        failure: @escaping (_ error: Error?)-> Void) {
         guard let url = URL(string: "https://raw.githubusercontent.com/ram-nadella/airport-codes/master/airports.json") else {
-            return callback([], NSError(domain: "", code: 404, userInfo: nil))
+            return failure(NSError(domain: "", code: 404, userInfo: nil))
         }
 
         let urlRequest = URLRequest(url: url)
@@ -63,8 +67,7 @@ class HTTPClient {
 
         let task = session.dataTask(with: urlRequest) { (data, _, error) in
             guard error == nil else {
-                print("error calling GET on /todos/1")
-                print(error!)
+                failure(error!)
                 return
             }
 
@@ -75,7 +78,7 @@ class HTTPClient {
 
             let airportInfo = try? JSONDecoder().decode([String: AirportInfo].self, from: responseData)
             DispatchQueue.main.async {
-                callback(airportInfo?.compactMap { $0.value } ?? [], nil)
+                success(airportInfo?.compactMap { $0.value } ?? [])
             }
         }
         task.resume()

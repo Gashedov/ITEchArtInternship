@@ -7,10 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		3F6C8C53225B92B4008C1DA1 /* CommonFlightInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F6C8C52225B92B4008C1DA1 /* CommonFlightInfo.swift */; };
+		3F6C8C53225B92B4008C1DA1 /* RawFlightInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F6C8C52225B92B4008C1DA1 /* RawFlightInfo.swift */; };
 		3F6C8C56225B931F008C1DA1 /* AirportsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F6C8C55225B931F008C1DA1 /* AirportsViewModel.swift */; };
 		3F8B7B3B22662C4E00900967 /* FlightInfoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F8B7B3A22662C4E00900967 /* FlightInfoViewModel.swift */; };
 		3F8B7B3D22662F6000900967 /* SheduleInfoToDisplay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F8B7B3C22662F6000900967 /* SheduleInfoToDisplay.swift */; };
+		3FA1855822673DD5007AE229 /* FlightInfoToDisplay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FA1855722673DD5007AE229 /* FlightInfoToDisplay.swift */; };
 		3FBB64CD225234C900928A85 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FBB64CC225234C900928A85 /* CoreDataManager.swift */; };
 		3FC5F2D4224CF2DD003D475B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FC5F2D3224CF2DD003D475B /* AppDelegate.swift */; };
 		3FC5F2D9224CF2DD003D475B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3FC5F2D7224CF2DD003D475B /* Main.storyboard */; };
@@ -36,10 +37,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		3F6C8C52225B92B4008C1DA1 /* CommonFlightInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonFlightInfo.swift; sourceTree = "<group>"; };
+		3F6C8C52225B92B4008C1DA1 /* RawFlightInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RawFlightInfo.swift; sourceTree = "<group>"; };
 		3F6C8C55225B931F008C1DA1 /* AirportsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AirportsViewModel.swift; sourceTree = "<group>"; };
 		3F8B7B3A22662C4E00900967 /* FlightInfoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlightInfoViewModel.swift; sourceTree = "<group>"; };
 		3F8B7B3C22662F6000900967 /* SheduleInfoToDisplay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheduleInfoToDisplay.swift; sourceTree = "<group>"; };
+		3FA1855722673DD5007AE229 /* FlightInfoToDisplay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlightInfoToDisplay.swift; sourceTree = "<group>"; };
 		3FBB64CC225234C900928A85 /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
 		3FC5F2D0224CF2DD003D475B /* AirportShedule.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AirportShedule.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3FC5F2D3224CF2DD003D475B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -147,8 +149,9 @@
 			isa = PBXGroup;
 			children = (
 				3FC5F303224CF7A5003D475B /* AirportInfo.swift */,
-				3F6C8C52225B92B4008C1DA1 /* CommonFlightInfo.swift */,
+				3F6C8C52225B92B4008C1DA1 /* RawFlightInfo.swift */,
 				3F8B7B3C22662F6000900967 /* SheduleInfoToDisplay.swift */,
+				3FA1855722673DD5007AE229 /* FlightInfoToDisplay.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -315,9 +318,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3F6C8C53225B92B4008C1DA1 /* CommonFlightInfo.swift in Sources */,
+				3F6C8C53225B92B4008C1DA1 /* RawFlightInfo.swift in Sources */,
 				3F8B7B3D22662F6000900967 /* SheduleInfoToDisplay.swift in Sources */,
 				3FC5F300224CF461003D475B /* TimetableViewController.swift in Sources */,
+				3FA1855822673DD5007AE229 /* FlightInfoToDisplay.swift in Sources */,
 				3FC5F302224CF4D3003D475B /* TimetableViewCell.swift in Sources */,
 				3FC5F306224CF7AA003D475B /* HTTPClient.swift in Sources */,
 				3F8B7B3B22662C4E00900967 /* FlightInfoViewModel.swift in Sources */,

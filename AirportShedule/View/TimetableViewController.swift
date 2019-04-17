@@ -51,7 +51,6 @@ class SheduleTableViewController: UITableViewController {
         button.tag = section
         button.addTarget(self, action: #selector(hendleExpandClose), for: .touchUpInside)
         
-        
         return button
     }
     

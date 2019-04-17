@@ -73,14 +73,15 @@ class AirportsViewModel {
     
     private func getDataFromNetwork(success: @escaping (_ data: [AirportInfo]) -> Void,
                                     failure: @escaping (_ error: Error?) -> Void) {
-        httpClient.getAirportInfo { airports, error in
-            if let error = error {
-                failure(error)
-                return
-            }
+        httpClient.getAirportInfo(success: { (airports) in
             success(airports)
+            }, failure: { error in
+                    if let error = error {
+                    failure(error)
+                        return
+                    }
+                })
         }
-    }
     
     private func saveDataToDataBase(_ data: [AirportInfo]) {
         coreDataManager.saveAirports(airports: data)
