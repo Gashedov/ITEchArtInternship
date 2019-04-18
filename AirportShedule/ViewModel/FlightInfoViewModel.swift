@@ -8,7 +8,7 @@
 
 import Foundation
 
-protocol FlightsViewModelDelegate: class{
+protocol FlightsViewModelDelegate: class {
     func dataReceived()
 }
 
@@ -19,19 +19,21 @@ class FlightInfoViewModel {
     var data: [FlightInfoToDisplay]
     private let httpClient: HTTPClient
     private let coreDataManager: CoreDataManager
+    private let dateManager: DateManager
     
     init(appDelegate: AppDelegate) {
         coreDataManager = CoreDataManager(appDelegate: appDelegate)
         data = []
         httpClient = HTTPClient()
+        dateManager = DateManager()
     }
     
-    func getData(airportCode: String){
+    func getData(path: Path, airportCode: String) {
         
         let request = generateRequest(airportCode: airportCode)
         
-        self.getDataFromNetwork(upon: request, success: { data in
-                self.data = self.prepareToDisplay(data: data)
+        self.getDataFromNetwork(path: path, uponRequestParametrs: request, success: { data in
+            self.data = self.prepareToDisplay(forType : path, data: data)
                 self.delegate?.dataReceived()
             
         }, failure: { error in
@@ -39,9 +41,9 @@ class FlightInfoViewModel {
         })
     }
         
-    private func getDataFromNetwork(upon request: [String:String], success: @escaping (_ data: [RawFlightInfo]) -> Void,
+    private func getDataFromNetwork(path: Path, uponRequestParametrs request: [String: String], success: @escaping (_ data: [RawFlightInfo]) -> Void,
                                                                    failure: @escaping (_ error: Error?) -> Void) {
-        httpClient.getFlightInfo(requests: request, success: { (airports) in
+        httpClient.getFlightInfo(requestType: path, components: request, success: { (airports) in
             success(airports)
         }, failure: { error in
             if let error = error {
@@ -51,30 +53,37 @@ class FlightInfoViewModel {
         })
     }
     
-    private func generateRequest(airportCode: String) -> [String:String]{
-        return [:]
+    private func generateRequest(airportCode: String) -> [String:String] {
+        let timeInterval = dateManager.getTime()
+        let end = String(format: "%f", timeInterval.end)
+        let begin = String(format: "%f", timeInterval.begin)
+        let request = ["airport": airportCode, "begin": begin, "end": end]
+        
+        return request
     }
     
-    private func prepareToDisplay(data : [RawFlightInfo]) -> [FlightInfoToDisplay] {
+    private func prepareToDisplay(forType type: Path, data: [RawFlightInfo]) -> [FlightInfoToDisplay] {
+        var result: [FlightInfoToDisplay] = []
         
+        if type == Path.arrival{
+            for airport in data{
+                var arrivalAirportName = ""
+                coreDataManager.getAirport(byIdentifier: airport.arrivalAirportCode ?? "" , result: { coreDataAirport in
+                    arrivalAirportName = coreDataAirport.name ?? ""
+                })
+                // converte time
+                result.append(FlightInfoToDisplay(AirportName: arrivalAirportName, arrivalTime: "", departureTime: ""))
+            }
+        }
+        
+        if type == Path.departure{
+            for airport in data{
+                var departureAirportName = ""
+                coreDataManager.getAirport(byIdentifier: airport.departureAirportCode ?? "" , result: { coreDataAirport in
+                    departureAirportName = coreDataAirport.name ?? ""
+                })
+            }
+        }
         return []
-    }
-    
-    private func getTime()->[String : String]{
-        
-        var calendar = Calendar(identifier: .gregorian)
-        calendar.timeZone = TimeZone(secondsFromGMT: 0)!
-        
-        let dayInterval = 24*60*60-1.0
-        let startOfDay = calendar.startOfDay(for: Date()).timeIntervalSince1970
-        
-        let endOfRequest = startOfDay + dayInterval
-        let StartOfRequest = endOfRequest - dayInterval*3
-        
-        let end = String(format:"%f", endOfRequest)
-        let start = String(format:"%f", StartOfRequest)
-        
-        return ["begin=" : start, "end=" : end]
-        
     }
 }

@@ -11,16 +11,15 @@ import Foundation
 struct RawFlightInfo {
     var arrivalAirportCode: String?
     var departureAirportCode: String?
-    var arrivalTime: Int?
-    var departureTime: Int?
+    var arrivalTime: Double?
+    var departureTime: Double?
 }
 
 extension RawFlightInfo: Decodable {
     enum CodingKeys: String, CodingKey {
-        case arrivalAirportCode = "lastSeen" //time since the begining of the era
+        case arrivalAirportCode = "estArrivalAirport"
         case departureAirportCode = "estDepartureAirport" // code "FFDD"
-        case arrivalTime = "estArrivalAirport"
+        case arrivalTime = "lastSeen"
         case departureTime = "firstSeen"
     }
 }
-

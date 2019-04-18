@@ -8,24 +8,20 @@
 
 import Foundation
 
+enum Path: String {
+    case departure = "flight/departure"
+    case arrival =  "flight/arrival"
+}
+
 class HTTPClient {
 
-    let baseFlightInfoPath = "https://opensky-network.org/api/flights/departure"
+    let baseFlightInfoPath = "https://opensky-network.org/api/"
 
-    private func parseRequest(requests: [String: String]) -> [URLQueryItem] {
-        var items: [URLQueryItem] = []
-
-        for (key, value) in requests {
-            items.append(URLQueryItem(name: key, value: value))
-        }
-        return items
-    }
-
-    func getFlightInfo (requests: [String: String], success: @escaping ([RawFlightInfo]) -> Void,
+    func getFlightInfo (requestType: Path, components: [String: String], success: @escaping ([RawFlightInfo]) -> Void,
                                                     failure: @escaping (_ error: Error?)-> Void) {
-
-        var urlComponents = URLComponents(string: baseFlightInfoPath)
-        urlComponents?.queryItems = parseRequest(requests: requests)
+        let basePath = baseFlightInfoPath + requestType.rawValue
+        var urlComponents = URLComponents(string: basePath)
+        urlComponents?.queryItems = parseRequest(requests: components)
 
         guard let url = urlComponents?.url! else {
             return failure(NSError(domain: "", code: 404, userInfo: nil))
@@ -54,7 +50,7 @@ class HTTPClient {
         }
         task.resume()
     }
-
+    
     func getAirportInfo(success: @escaping ([AirportInfo]) -> Void,
                         failure: @escaping (_ error: Error?)-> Void) {
         guard let url = URL(string: "https://raw.githubusercontent.com/ram-nadella/airport-codes/master/airports.json") else {
@@ -82,6 +78,16 @@ class HTTPClient {
             }
         }
         task.resume()
-
+    }
+    
+    //MARK:- private methods
+    
+    private func parseRequest(requests: [String: String]) -> [URLQueryItem] {
+        var items: [URLQueryItem] = []
+        
+        for (key, value) in requests {
+            items.append(URLQueryItem(name: key, value: value))
+        }
+        return items
     }
 }

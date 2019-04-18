@@ -24,7 +24,6 @@ class SheduleTableViewController: UITableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         viewModel.getData()
-        
     }
 
     // MARK: - Table view data source
@@ -91,7 +90,6 @@ class SheduleTableViewController: UITableViewController {
 
 extension SheduleTableViewController: AirportsViewModelDelegate {
     func receivedData() {
-        //searchingCountry = viewModel.data
         tableView.reloadData()
         print(viewModel.dataToDisplay.isEmpty ? "data is empty" : "data updated")
     }
