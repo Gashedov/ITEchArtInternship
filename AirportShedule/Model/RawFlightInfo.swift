@@ -11,8 +11,8 @@ import Foundation
 struct RawFlightInfo {
     var arrivalAirportCode: String?
     var departureAirportCode: String?
-    var arrivalTime: Double?
-    var departureTime: Double?
+    var arrivalTime: Int?
+    var departureTime: Int?
 }
 
 extension RawFlightInfo: Decodable {

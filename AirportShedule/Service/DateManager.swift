@@ -8,27 +8,42 @@
 
 import Foundation
 
-class DateManager
-{
+class DateManager {
     
-    func getTime()->(begin: Int, end: Int){
+    private let dayInterval = 24*60*60-1
+    
+    init() {
+    }
+    
+    func getTime()->(begin: Int, end: Int) {
         
         var calendar = Calendar(identifier: .gregorian)
         calendar.timeZone = TimeZone(secondsFromGMT: 0)!
-        
-        let dayInterval = 24*60*60-1.0
-        let startOfDay = calendar.startOfDay(for: Date()).timeIntervalSince1970
+        let startOfDay = calendar.startOfDay(for: Date()).timeIntervalSince1970.toInt() ?? 0
         
         let endOfRequest = startOfDay + dayInterval
         let startOfRequest = endOfRequest - dayInterval*3
         
-        return (begin: startOfRequest.toInt() ?? 0, end:  endOfRequest.toInt() ?? 0)
+        return (begin: startOfRequest, end:  endOfRequest)
         
     }
     
-    func convertToDate(time: Int)-> (Date,Date){
-        return (Date(),Date())
+    func convertTimeToString(time: Int) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "HH:mm"
+        let date = Date(timeIntervalSince1970: Double(time))
+        
+        return dateFormatter.string(from: date)
     }
+    
+    func convertDateToString(time: Int) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "EEEE, MMM d, yyyy"
+        let date = Date(timeIntervalSince1970: Double(time))
+        
+        return dateFormatter.string(from: date)
+    }
+    
 }
 
 extension Double {

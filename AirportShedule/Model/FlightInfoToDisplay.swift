@@ -9,7 +9,8 @@
 import Foundation
 
 struct FlightInfoToDisplay {
-    var AirportName: String?
+    var airportName: String?
     var arrivalTime: String?
     var departureTime: String?
 }
+

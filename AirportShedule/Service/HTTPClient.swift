@@ -9,8 +9,8 @@
 import Foundation
 
 enum Path: String {
-    case departure = "flight/departure"
-    case arrival =  "flight/arrival"
+    case departureRequest = "flight/departure"
+    case arrivalRequest =  "flight/arrival"
 }
 
 class HTTPClient {

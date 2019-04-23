@@ -14,31 +14,54 @@ protocol FlightsViewModelDelegate: class {
 
 class FlightInfoViewModel {
     
+    enum DataType{
+        case arrival
+        case departure
+    }
+    
     weak var delegate: FlightsViewModelDelegate?
     
-    var data: [FlightInfoToDisplay]
+    var data: [String: [FlightInfoToDisplay]]
     private let httpClient: HTTPClient
     private let coreDataManager: CoreDataManager
     private let dateManager: DateManager
+    private var dataType: DataType{
+        didSet{
+            delegate?.dataReceived()
+        }
+    }
     
     init(appDelegate: AppDelegate) {
         coreDataManager = CoreDataManager(appDelegate: appDelegate)
-        data = []
+        data = [:]
         httpClient = HTTPClient()
         dateManager = DateManager()
+        dataType = .arrival
     }
     
-    func getData(path: Path, airportCode: String) {
+    func getData(airportCode: String) {
         
         let request = generateRequest(airportCode: airportCode)
         
-        self.getDataFromNetwork(path: path, uponRequestParametrs: request, success: { data in
-            self.data = self.prepareToDisplay(forType : path, data: data)
+        switch dataType {
+        case .arrival:
+            self.getDataFromNetwork(path: .arrivalRequest, uponRequestParametrs: request, success: { data in
+                self.data = self.prepareToDisplay(data: data)
                 self.delegate?.dataReceived()
-            
-        }, failure: { error in
-            print("Error: \(String(describing: error))")
-        })
+                
+            }, failure: { error in
+                print("Error: \(String(describing: error))")
+            })
+        case .departure:
+            self.getDataFromNetwork(path: .departureRequest, uponRequestParametrs: request, success: { data in
+                self.data = self.prepareToDisplay(data: data)
+                self.delegate?.dataReceived()
+                
+            }, failure: { error in
+                print("Error: \(String(describing: error))")
+            })
+        }
+        
     }
         
     private func getDataFromNetwork(path: Path, uponRequestParametrs request: [String: String], success: @escaping (_ data: [RawFlightInfo]) -> Void,
@@ -62,28 +85,37 @@ class FlightInfoViewModel {
         return request
     }
     
-    private func prepareToDisplay(forType type: Path, data: [RawFlightInfo]) -> [FlightInfoToDisplay] {
-        var result: [FlightInfoToDisplay] = []
-        
-        if type == Path.arrival{
-            for airport in data{
-                var arrivalAirportName = ""
-                coreDataManager.getAirport(byIdentifier: airport.arrivalAirportCode ?? "" , result: { coreDataAirport in
-                    arrivalAirportName = coreDataAirport.name ?? ""
-                })
-                // converte time
-                result.append(FlightInfoToDisplay(AirportName: arrivalAirportName, arrivalTime: "", departureTime: ""))
+    private func prepareToDisplay(data: [RawFlightInfo]) -> [String: [FlightInfoToDisplay]] {
+        var result: [String: [FlightInfoToDisplay]] = [:]
+
+        for flightInfo in data {
+            
+            let arrivalTime = dateManager.convertTimeToString(time: flightInfo.arrivalTime ?? 0)
+            let departureTime = dateManager.convertTimeToString(time: flightInfo.departureTime ?? 0)
+            var airportName = ""
+            var key = ""
+            
+            switch dataType {
+            case .arrival:
+                coreDataManager.getAirport(byIdentifier: flightInfo.arrivalAirportCode ?? "", result: { coreDataAirport in
+                    airportName = coreDataAirport.name ?? ""
+                    })
+                key = dateManager.convertDateToString(time: flightInfo.arrivalTime ?? 0)
+            case .departure:
+                coreDataManager.getAirport(byIdentifier: flightInfo.departureAirportCode ?? "", result: { coreDataAirport in
+                    airportName = coreDataAirport.name ?? ""
+                    })
+                key = dateManager.convertDateToString(time: flightInfo.departureTime ?? 0)
+            }
+            
+            if result[key] != nil {
+                result[key]?.append(FlightInfoToDisplay(airportName: airportName, arrivalTime: arrivalTime, departureTime: departureTime))
+            }
+            else {
+                result[key] = [FlightInfoToDisplay(airportName: airportName, arrivalTime: arrivalTime, departureTime: departureTime)]
             }
         }
         
-        if type == Path.departure{
-            for airport in data{
-                var departureAirportName = ""
-                coreDataManager.getAirport(byIdentifier: airport.departureAirportCode ?? "" , result: { coreDataAirport in
-                    departureAirportName = coreDataAirport.name ?? ""
-                })
-            }
-        }
-        return []
+        return result
     }
 }
