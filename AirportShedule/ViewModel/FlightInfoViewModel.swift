@@ -25,8 +25,8 @@ class FlightInfoViewModel {
     private let httpClient: HTTPClient
     private let coreDataManager: CoreDataManager
     private let dateManager: DateManager
-    private var dataType: DataType{
-        didSet{
+    private var dataType: DataType {
+        didSet {
             delegate?.dataReceived()
         }
     }
@@ -76,7 +76,7 @@ class FlightInfoViewModel {
         })
     }
     
-    private func generateRequest(airportCode: String) -> [String:String] {
+    private func generateRequest(airportCode: String) -> [String: String] {
         let timeInterval = dateManager.getTime()
         let end = String(format: "%f", timeInterval.end)
         let begin = String(format: "%f", timeInterval.begin)
@@ -110,12 +110,10 @@ class FlightInfoViewModel {
             
             if result[key] != nil {
                 result[key]?.append(FlightInfoToDisplay(airportName: airportName, arrivalTime: arrivalTime, departureTime: departureTime))
-            }
-            else {
+            } else {
                 result[key] = [FlightInfoToDisplay(airportName: airportName, arrivalTime: arrivalTime, departureTime: departureTime)]
             }
         }
-        
         return result
     }
 }

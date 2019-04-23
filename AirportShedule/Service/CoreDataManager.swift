@@ -23,7 +23,7 @@ class CoreDataManager {
         let context = appDelegate.persistentContainer.newBackgroundContext() //viewContext
 
         appDelegate.persistentContainer.performBackgroundTask { _ in
-            var downloadedData:[AirportInfo] = []
+            var downloadedData: [AirportInfo] = []
             do {
                 let request: NSFetchRequest<Airport> = Airport.fetchRequest()
                 let airportResult = try context.fetch(request)
@@ -49,23 +49,21 @@ class CoreDataManager {
         }
     }
     
-    func getAirport(byIdentifier identifier: String, result : @escaping (AirportInfo)-> Void){
+    func getAirport(byIdentifier identifier: String, result: @escaping (AirportInfo) -> Void) {
         let context = appDelegate.persistentContainer.newBackgroundContext()
         appDelegate.persistentContainer.performBackgroundTask { _ in
-        do {
-            let fetchRequest : NSFetchRequest<Airport> = Airport.fetchRequest()
-            fetchRequest.predicate = NSPredicate(format: "code == %@", identifier)
-            let fetchedResults = try context.fetch(fetchRequest)
-            if let airport = fetchedResults.first {
-                DispatchQueue.main.async {
-                    result(AirportInfo(country: airport.country ?? "", name: airport.name ?? "", city: airport.city ?? "", code: airport.code ?? ""))
+            do {
+                let fetchRequest: NSFetchRequest<Airport> = Airport.fetchRequest()
+                fetchRequest.predicate = NSPredicate(format: "code == %@", identifier)
+                let fetchedResults = try context.fetch(fetchRequest)
+                if let airport = fetchedResults.first {
+                    DispatchQueue.main.async {
+                        result(AirportInfo(country: airport.country ?? "", name: airport.name ?? "", city: airport.city ?? "", code: airport.code ?? ""))
+                    }
                 }
+            } catch {
+                print ("fetch task failed", error)
             }
-        }
-        catch {
-            print ("fetch task failed", error)
-        }
-            
         }
     }
 

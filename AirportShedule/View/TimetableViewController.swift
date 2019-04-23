@@ -83,6 +83,26 @@ class SheduleTableViewController: UITableViewController {
             return cell
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        super.prepare(for: segue, sender: sender)
+        
+        guard let flightInfoViewController = segue.destination as? FlightInfoViewController else {
+            fatalError("Unexpected destination: \(segue.destination)")
+        }
+        
+        guard let selectedAirportCell = sender as? TimetableViewCell else {
+            fatalError("Unexpected sender: \(sender)")
+        }
+        
+        guard let indexPath = tableView.indexPath(for: selectedAirportCell) else {
+            fatalError("The selected cell is not being displayed by the table")
+        }
+        
+        let selectedAirport = viewModel.dataToDisplay[indexPath.section].airportAttributs[indexPath.row].code
+        flightInfoViewController.setAirportCode(code: selectedAirport)
+        
+    }
+    
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 
     }
