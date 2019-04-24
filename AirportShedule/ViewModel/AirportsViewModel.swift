@@ -14,20 +14,20 @@ protocol AirportsViewModelDelegate: class {
 
 class AirportsViewModel {
     weak var delegate: AirportsViewModelDelegate?
-    
+
     private var data: [SheduleInfoToDisplay]
-    var dataToDisplay : [SheduleInfoToDisplay]
-    
+    var dataToDisplay: [SheduleInfoToDisplay]
+
     private let httpClient: HTTPClient
     private let coreDataManager: CoreDataManager
-    
+
     init(appDelegate: AppDelegate) {
         coreDataManager = CoreDataManager(appDelegate: appDelegate)
         data = []
         dataToDisplay = []
         httpClient = HTTPClient()
     }
-    
+
     func getData() {
         getDataFromDataBase(success: { data in
             self.data = self.prepareToDisplay(data)
@@ -36,20 +36,20 @@ class AirportsViewModel {
         }, failure: { error in
             print("Error: \(String(describing: error))")
         })
-        
+
         self.getDataFromNetwork(success: { data in
             if self.data.isEmpty {
                 self.data = self.prepareToDisplay(data)
                 self.dataToDisplay = self.data
                 self.delegate?.receivedData()
             }
-            
+
             self.saveDataToDataBase(data)
         }, failure: { error in
             print("Error: \(String(describing: error))")
         })
     }
-    
+
     func searchCountry(searchingCountry: String) {
         if searchingCountry.isEmpty {
             dataToDisplay = data
@@ -58,8 +58,9 @@ class AirportsViewModel {
         }
         delegate?.receivedData()
     }
-    
-    //MARK:- Private methods
+
+    // MARK: - Private methods
+
     private func getDataFromDataBase(success: @escaping (_ data: [AirportInfo]) -> Void,
                                      failure: @escaping (_ error: Error?) -> Void) {
         coreDataManager.loadDataFromDB { data, error in
@@ -70,7 +71,7 @@ class AirportsViewModel {
             success(data)
         }
     }
-    
+
     private func getDataFromNetwork(success: @escaping (_ data: [AirportInfo]) -> Void,
                                     failure: @escaping (_ error: Error?) -> Void) {
         httpClient.getAirportInfo(success: { (airports) in
@@ -82,11 +83,11 @@ class AirportsViewModel {
                     }
                 })
         }
-    
+
     private func saveDataToDataBase(_ data: [AirportInfo]) {
         coreDataManager.saveAirports(airports: data)
     }
-    
+
     private func prepareToDisplay(_ airports: [AirportInfo]) -> [SheduleInfoToDisplay] {
         let data = Dictionary(grouping: airports, by: { $0.country })
             .reduce(into: [SheduleInfoToDisplay](), { (result, airports) in

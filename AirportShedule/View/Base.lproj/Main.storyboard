@@ -134,7 +134,7 @@
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="547"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <prototypes>
-                                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="FlightInfoCell" rowHeight="90" id="ERQ-ef-CPh" customClass="FlightInfoableViewCell" customModule="AirportShedule" customModuleProvider="target">
+                                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="FlightInfoCell" rowHeight="90" id="ERQ-ef-CPh" customClass="FlightInfoTableViewCell" customModule="AirportShedule" customModuleProvider="target">
                                                 <rect key="frame" x="0.0" y="28" width="375" height="90"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="ERQ-ef-CPh" id="yiM-ep-bnn">
@@ -195,9 +195,7 @@
                                             <segment title="Departure"/>
                                         </segments>
                                         <connections>
-                                            <action selector="switchType:" destination="utK-7X-noP" eventType="valueChanged" id="6QB-6s-vJq"/>
-                                            <action selector="switchType:" destination="3hV-qj-N5k" eventType="valueChanged" id="xkL-tB-YcL"/>
-                                            <action selector="tacChUO:" destination="utK-7X-noP" eventType="touchUpInside" id="Hp9-6B-75G"/>
+                                            <action selector="switchType:" destination="3hV-qj-N5k" eventType="valueChanged" id="6Et-2F-WYj"/>
                                         </connections>
                                     </segmentedControl>
                                 </subviews>
@@ -218,7 +216,6 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zyi-ti-3N7" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <exit id="utK-7X-noP" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="393" y="-187"/>
         </scene>

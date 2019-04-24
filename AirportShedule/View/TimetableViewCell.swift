@@ -24,7 +24,7 @@ class TimetableViewCell: UITableViewCell {
 
         // Configure the view for the selected state
     }
-    
+
     func setValues(code: String, city: String, name: String) {
         codeLabel.text = code
         cityLabel.text = city

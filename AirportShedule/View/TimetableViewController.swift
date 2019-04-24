@@ -9,7 +9,7 @@
 import UIKit
 
 class SheduleTableViewController: UITableViewController {
-    
+
     private let viewModel = AirportsViewModel(appDelegate: UIApplication.shared.delegate as? AppDelegate ?? AppDelegate())
     private let searchController = UISearchController(searchResultsController: nil)
 
@@ -21,7 +21,7 @@ class SheduleTableViewController: UITableViewController {
         definesPresentationContext = true
         tableView.tableHeaderView = searchController.searchBar
     }
-    
+
     override func viewWillAppear(_ animated: Bool) {
         viewModel.getData()
     }
@@ -49,10 +49,10 @@ class SheduleTableViewController: UITableViewController {
         button.titleLabel?.textAlignment = .left
         button.tag = section
         button.addTarget(self, action: #selector(hendleExpandClose), for: .touchUpInside)
-        
+
         return button
     }
-    
+
     @objc func hendleExpandClose(button: UIButton) {
         let section = button.tag
         var indexPaths = [IndexPath]()
@@ -60,7 +60,7 @@ class SheduleTableViewController: UITableViewController {
             let indexPath = IndexPath(row: row, section: section)
             indexPaths.append(indexPath)
         }
-        
+
         if viewModel.dataToDisplay[section].isOpen {
             viewModel.dataToDisplay[section].isOpen = false
             tableView.deleteRows(at: indexPaths, with: .none)
@@ -69,11 +69,11 @@ class SheduleTableViewController: UITableViewController {
             tableView.insertRows(at: indexPaths, with: .none)
         }
     }
-    
+
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 40
     }
-    
+
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "TimetableViewCell") as? TimetableViewCell else {
                 return UITableViewCell()
@@ -82,27 +82,27 @@ class SheduleTableViewController: UITableViewController {
             cell.setValues(code: airport.code, city: airport.city ?? "", name: airport.airportName ?? "")
             return cell
     }
-    
+
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         super.prepare(for: segue, sender: sender)
-        
+
         guard let flightInfoViewController = segue.destination as? FlightInfoViewController else {
             fatalError("Unexpected destination: \(segue.destination)")
         }
-        
+
         guard let selectedAirportCell = sender as? TimetableViewCell else {
             fatalError("Unexpected sender: \(sender)")
         }
-        
+
         guard let indexPath = tableView.indexPath(for: selectedAirportCell) else {
             fatalError("The selected cell is not being displayed by the table")
         }
-        
+
         let selectedAirport = viewModel.dataToDisplay[indexPath.section].airportAttributs[indexPath.row].code
         flightInfoViewController.setAirportCode(code: selectedAirport)
-        
+
     }
-    
+
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 
     }

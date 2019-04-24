@@ -10,16 +10,16 @@ import Foundation
 import CoreData
 
 class CoreDataManager {
-    
+
     private let appDelegate: AppDelegate
-    
+
     init(appDelegate: AppDelegate) {
         self.appDelegate = appDelegate
     }
 
     func loadDataFromDB(callback: @escaping ([AirportInfo], Error?) -> Void) {
         print("load Data from DB")
-        
+
         let context = appDelegate.persistentContainer.newBackgroundContext() //viewContext
 
         appDelegate.persistentContainer.performBackgroundTask { _ in
@@ -48,13 +48,14 @@ class CoreDataManager {
             self.backgroundSaveAirports(airports: airports, context: backContext)
         }
     }
-    
+
     func getAirport(byIdentifier identifier: String, result: @escaping (AirportInfo) -> Void) {
         let context = appDelegate.persistentContainer.newBackgroundContext()
         appDelegate.persistentContainer.performBackgroundTask { _ in
             do {
                 let fetchRequest: NSFetchRequest<Airport> = Airport.fetchRequest()
                 fetchRequest.predicate = NSPredicate(format: "code == %@", identifier)
+                fetchRequest.returnsObjectsAsFaults = false
                 let fetchedResults = try context.fetch(fetchRequest)
                 if let airport = fetchedResults.first {
                     DispatchQueue.main.async {
@@ -82,7 +83,7 @@ class CoreDataManager {
             print("Detele all data error :", error)
         }
     }
-    
+
     private func backgroundSaveAirports(airports: [AirportInfo], context: NSManagedObjectContext) {
 
         context.perform {

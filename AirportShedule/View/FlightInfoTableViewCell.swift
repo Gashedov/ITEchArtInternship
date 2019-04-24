@@ -20,9 +20,9 @@ class FlightInfoTableViewCell: UITableViewCell {
 
         // Configure the view for the selected state
     }
-    
+
     func setValues(name: String, arrivalTime: String, departureTime: String) {
-        
+
     }
 
 }

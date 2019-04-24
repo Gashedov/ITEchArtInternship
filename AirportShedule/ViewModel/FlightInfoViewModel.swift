@@ -13,24 +13,25 @@ protocol FlightsViewModelDelegate: class {
 }
 
 class FlightInfoViewModel {
-    
-    enum DataType{
+
+    enum DataType {
         case arrival
         case departure
     }
-    
+
     weak var delegate: FlightsViewModelDelegate?
-    
+    var airportCode = ""
+
     var data: [String: [FlightInfoToDisplay]]
     private let httpClient: HTTPClient
     private let coreDataManager: CoreDataManager
     private let dateManager: DateManager
     private var dataType: DataType {
         didSet {
-            delegate?.dataReceived()
+            getData()
         }
     }
-    
+
     init(appDelegate: AppDelegate) {
         coreDataManager = CoreDataManager(appDelegate: appDelegate)
         data = [:]
@@ -38,17 +39,17 @@ class FlightInfoViewModel {
         dateManager = DateManager()
         dataType = .arrival
     }
-    
-    func getData(airportCode: String) {
-        
+
+    func getData() {
+
         let request = generateRequest(airportCode: airportCode)
-        
+
         switch dataType {
         case .arrival:
             self.getDataFromNetwork(path: .arrivalRequest, uponRequestParametrs: request, success: { data in
                 self.data = self.prepareToDisplay(data: data)
                 self.delegate?.dataReceived()
-                
+
             }, failure: { error in
                 print("Error: \(String(describing: error))")
             })
@@ -56,14 +57,28 @@ class FlightInfoViewModel {
             self.getDataFromNetwork(path: .departureRequest, uponRequestParametrs: request, success: { data in
                 self.data = self.prepareToDisplay(data: data)
                 self.delegate?.dataReceived()
-                
+
             }, failure: { error in
                 print("Error: \(String(describing: error))")
             })
         }
-        
+
     }
-        
+
+    func switchType() {
+        data = [:]
+        delegate?.dataReceived()
+
+        if dataType == .arrival {
+            dataType = .departure
+        } else if dataType == .departure {
+            dataType = .arrival
+        }
+
+    }
+
+    // MARK: - private methods
+
     private func getDataFromNetwork(path: Path, uponRequestParametrs request: [String: String], success: @escaping (_ data: [RawFlightInfo]) -> Void,
                                                                    failure: @escaping (_ error: Error?) -> Void) {
         httpClient.getFlightInfo(requestType: path, components: request, success: { (airports) in
@@ -75,26 +90,26 @@ class FlightInfoViewModel {
             }
         })
     }
-    
+
     private func generateRequest(airportCode: String) -> [String: String] {
         let timeInterval = dateManager.getTime()
-        let end = String(format: "%f", timeInterval.end)
-        let begin = String(format: "%f", timeInterval.begin)
+        let end = String(timeInterval.end)
+        let begin = String(timeInterval.begin)
         let request = ["airport": airportCode, "begin": begin, "end": end]
-        
+
         return request
     }
-    
+
     private func prepareToDisplay(data: [RawFlightInfo]) -> [String: [FlightInfoToDisplay]] {
         var result: [String: [FlightInfoToDisplay]] = [:]
 
         for flightInfo in data {
-            
+
             let arrivalTime = dateManager.convertTimeToString(time: flightInfo.arrivalTime ?? 0)
             let departureTime = dateManager.convertTimeToString(time: flightInfo.departureTime ?? 0)
             var airportName = ""
             var key = ""
-            
+
             switch dataType {
             case .arrival:
                 coreDataManager.getAirport(byIdentifier: flightInfo.arrivalAirportCode ?? "", result: { coreDataAirport in
@@ -107,7 +122,7 @@ class FlightInfoViewModel {
                     })
                 key = dateManager.convertDateToString(time: flightInfo.departureTime ?? 0)
             }
-            
+
             if result[key] != nil {
                 result[key]?.append(FlightInfoToDisplay(airportName: airportName, arrivalTime: arrivalTime, departureTime: departureTime))
             } else {
