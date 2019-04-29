@@ -15,6 +15,7 @@
 		3F93ABAB226F4DD8007A477D /* FlightInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F93ABAA226F4DD8007A477D /* FlightInfoViewController.swift */; };
 		3F93ABAD226F5EA1007A477D /* FlightInfoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F93ABAC226F5EA1007A477D /* FlightInfoTableViewCell.swift */; };
 		3FA1855822673DD5007AE229 /* FlightInfoToDisplay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FA1855722673DD5007AE229 /* FlightInfoToDisplay.swift */; };
+		3FBB0F682277082B0023321D /* MasterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FBB0F672277082B0023321D /* MasterViewController.swift */; };
 		3FBB64CD225234C900928A85 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FBB64CC225234C900928A85 /* CoreDataManager.swift */; };
 		3FC5F2D4224CF2DD003D475B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FC5F2D3224CF2DD003D475B /* AppDelegate.swift */; };
 		3FC5F2D9224CF2DD003D475B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3FC5F2D7224CF2DD003D475B /* Main.storyboard */; };
@@ -48,6 +49,7 @@
 		3F93ABAA226F4DD8007A477D /* FlightInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlightInfoViewController.swift; sourceTree = "<group>"; };
 		3F93ABAC226F5EA1007A477D /* FlightInfoTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlightInfoTableViewCell.swift; sourceTree = "<group>"; };
 		3FA1855722673DD5007AE229 /* FlightInfoToDisplay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlightInfoToDisplay.swift; sourceTree = "<group>"; };
+		3FBB0F672277082B0023321D /* MasterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MasterViewController.swift; sourceTree = "<group>"; };
 		3FBB64CC225234C900928A85 /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
 		3FC5F2D0224CF2DD003D475B /* AirportShedule.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AirportShedule.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3FC5F2D3224CF2DD003D475B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -179,6 +181,7 @@
 				3F93ABAC226F5EA1007A477D /* FlightInfoTableViewCell.swift */,
 				3FC5F2FF224CF461003D475B /* TimetableViewController.swift */,
 				3F93ABAA226F4DD8007A477D /* FlightInfoViewController.swift */,
+				3FBB0F672277082B0023321D /* MasterViewController.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -305,7 +308,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/SwiftLint/swiftlint\"\n";
+			shellScript = "\"${PODS_ROOT}/SwiftLint/swiftlint\" --config Swiftlint.yml --no-cache\n";
 		};
 		8E702908CB6714232BD01CEC /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -326,7 +329,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\necho \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -335,6 +338,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3FBB0F682277082B0023321D /* MasterViewController.swift in Sources */,
 				3F6C8C53225B92B4008C1DA1 /* RawFlightInfo.swift in Sources */,
 				3F8B7B3D22662F6000900967 /* SheduleInfoToDisplay.swift in Sources */,
 				3FC5F300224CF461003D475B /* TimetableViewController.swift in Sources */,

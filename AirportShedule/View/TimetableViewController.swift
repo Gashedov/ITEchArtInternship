@@ -8,11 +8,12 @@
 
 import UIKit
 
-class SheduleTableViewController: UITableViewController {
+class SheduleTableViewController: UIViewController {
 
     private let viewModel = AirportsViewModel(appDelegate: UIApplication.shared.delegate as? AppDelegate ?? AppDelegate())
     private let searchController = UISearchController(searchResultsController: nil)
-
+    @IBOutlet weak var tableView: UITableView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         viewModel.delegate = self
@@ -20,37 +21,12 @@ class SheduleTableViewController: UITableViewController {
         searchController.dimsBackgroundDuringPresentation = false
         definesPresentationContext = true
         tableView.tableHeaderView = searchController.searchBar
+        tableView.dataSource = self
+        tableView.delegate = self
     }
 
     override func viewWillAppear(_ animated: Bool) {
         viewModel.getData()
-    }
-
-    // MARK: - Table view data source
-
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
-            return viewModel.dataToDisplay.count
-    }
-
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if viewModel.dataToDisplay[section].isOpen {
-            return viewModel.dataToDisplay[section].airportAttributs.count
-        } else {
-            return 0
-        }
-    }
-
-    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let button = UIButton(type: .system)
-        button.setTitle(viewModel.dataToDisplay[section].airportCountry, for: .normal)
-        button.setTitleColor(.black, for: .normal)
-        button.backgroundColor = .gray
-        button.titleLabel?.textAlignment = .left
-        button.tag = section
-        button.addTarget(self, action: #selector(hendleExpandClose), for: .touchUpInside)
-
-        return button
     }
 
     @objc func hendleExpandClose(button: UIButton) {
@@ -63,30 +39,19 @@ class SheduleTableViewController: UITableViewController {
 
         if viewModel.dataToDisplay[section].isOpen {
             viewModel.dataToDisplay[section].isOpen = false
-            tableView.deleteRows(at: indexPaths, with: .none)
+            tableView.deleteRows(at: indexPaths, with: .automatic)
         } else {
             viewModel.dataToDisplay[section].isOpen = true
-            tableView.insertRows(at: indexPaths, with: .none)
+            tableView.insertRows(at: indexPaths, with: .automatic)
         }
     }
 
-    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 40
-    }
 
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: "TimetableViewCell") as? TimetableViewCell else {
-                return UITableViewCell()
-            }
-        let airport = viewModel.dataToDisplay[indexPath.section].airportAttributs[indexPath.row]
-            cell.setValues(code: airport.code, city: airport.city ?? "", name: airport.airportName ?? "")
-            return cell
-    }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         super.prepare(for: segue, sender: sender)
 
-        guard let flightInfoViewController = segue.destination as? FlightInfoViewController else {
+        guard let flightInfoViewController = segue.destination as? MasterViewController else {
             fatalError("Unexpected destination: \(segue.destination)")
         }
 
@@ -102,9 +67,41 @@ class SheduleTableViewController: UITableViewController {
         flightInfoViewController.setAirportCode(code: selectedAirport)
 
     }
+}
 
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+extension SheduleTableViewController: UITableViewDataSource {
+    func numberOfSections(in tableView: UITableView) -> Int {
+        // #warning Incomplete implementation, return the number of sections
+        return viewModel.dataToDisplay.count
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if viewModel.dataToDisplay[section].isOpen {
+            return viewModel.dataToDisplay[section].airportAttributs.count
+        } else {
+            return 0
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "TimetableViewCellReuseIdentifier", for: indexPath) as! TimetableViewCell
+        let airport = viewModel.dataToDisplay[indexPath.section].airportAttributs[indexPath.row]
+        cell.setValues(code: airport.code, city: airport.city ?? "", name: airport.airportName ?? "")
+        return cell
+    }
+}
 
+extension SheduleTableViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let button = UIButton(type: .system)
+        button.setTitle(viewModel.dataToDisplay[section].airportCountry, for: .normal)
+        button.setTitleColor(.black, for: .normal)
+        button.backgroundColor = .gray
+        button.titleLabel?.textAlignment = .left
+        button.tag = section
+        button.addTarget(self, action: #selector(hendleExpandClose), for: .touchUpInside)
+        
+        return button
     }
 }
 

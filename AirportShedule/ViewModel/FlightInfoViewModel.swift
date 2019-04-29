@@ -14,30 +14,22 @@ protocol FlightsViewModelDelegate: class {
 
 class FlightInfoViewModel {
 
-    enum DataType {
-        case arrival
-        case departure
-    }
-
     weak var delegate: FlightsViewModelDelegate?
-    var airportCode = ""
 
     var data: [String: [FlightInfoToDisplay]]
     private let httpClient: HTTPClient
     private let coreDataManager: CoreDataManager
     private let dateManager: DateManager
-    private var dataType: DataType {
-        didSet {
-            getData()
-        }
-    }
+    private let dataType: FlightType
+    private let airportCode: String
 
-    init(appDelegate: AppDelegate) {
+    init(appDelegate: AppDelegate, dataType: FlightType, airportCode: String) {
         coreDataManager = CoreDataManager(appDelegate: appDelegate)
         data = [:]
         httpClient = HTTPClient()
         dateManager = DateManager()
-        dataType = .arrival
+        self.dataType = dataType
+        self.airportCode = airportCode
     }
 
     func getData() {
@@ -61,18 +53,6 @@ class FlightInfoViewModel {
             }, failure: { error in
                 print("Error: \(String(describing: error))")
             })
-        }
-
-    }
-
-    func switchType() {
-        data = [:]
-        delegate?.dataReceived()
-
-        if dataType == .arrival {
-            dataType = .departure
-        } else if dataType == .departure {
-            dataType = .arrival
         }
 
     }

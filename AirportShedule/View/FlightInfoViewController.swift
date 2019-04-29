@@ -13,18 +13,22 @@ class FlightInfoViewController: UIViewController, UITableViewDelegate, UITableVi
     @IBOutlet weak var tableView: UITableView!
     
     var alert: UIAlertController = UIAlertController()
+    var flightType: FlightType!
+    var airportCode: String?
 
-    private let viewModel = FlightInfoViewModel(appDelegate:
-        UIApplication.shared.delegate as? AppDelegate ?? AppDelegate())
+    private var viewModel : FlightInfoViewModel!
 
     private var keys: [String] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        viewModel = FlightInfoViewModel(appDelegate:
+            UIApplication.shared.delegate as? AppDelegate ?? AppDelegate(), dataType: flightType, airportCode: airportCode ?? "") // исправить 
+        
         tableView.delegate = self
         tableView.dataSource = self
-        viewModel.delegate = self
+        viewModel?.delegate = self
 
         alert = UIAlertController(title: "Sorry", message: "This airport does't provide information about flihgts", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { action in
@@ -39,12 +43,10 @@ class FlightInfoViewController: UIViewController, UITableViewDelegate, UITableVi
                 print("destructive")
 
             }}))
+        viewModel?.getData()
     }
 
     override func viewWillAppear(_ animated: Bool) {
-        viewModel.getData()
-//        keys = viewModel.data.keys.sorted()
-//        keys.sort(by: >)
     }
 
     // MARK: - Table view data source
@@ -55,37 +57,28 @@ class FlightInfoViewController: UIViewController, UITableViewDelegate, UITableVi
 
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
 
-        return viewModel.data.keys.sorted()[section]
+        return viewModel?.data.keys.sorted()[section]
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.data[viewModel.data.keys.sorted()[section]]?.count ?? 0
+        return viewModel?.data[viewModel.data.keys.sorted()[section]]?.count ?? 0
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "FlightInfoCell") as? FlightInfoTableViewCell else {
             return UITableViewCell()
         }
-        let airport = viewModel.data[viewModel.data.keys.sorted()[indexPath.section]]?[indexPath.row]
+        let airport = viewModel?.data[viewModel.data.keys.sorted()[indexPath.section]]?[indexPath.row]
         //cell.setValues()
         return cell
-    }
-
-    func setAirportCode(code: String) {
-        viewModel.airportCode = code
-    }
-
-    @IBAction func switchType(_ sender: UISegmentedControl) {
-        // works when segmentedControl switches to other side
-        //start indicator
-        viewModel.switchType()
     }
 }
 
 extension FlightInfoViewController: FlightsViewModelDelegate {
     func dataReceived() {
         tableView.reloadData()
-        if viewModel.data.isEmpty { // and indicator not active
+        if viewModel.data.isEmpty {
+            // видит что данные пустые и вызывает алерт
             self.present(alert, animated: true, completion: nil)
         }
     }
