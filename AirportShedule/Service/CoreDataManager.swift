@@ -52,13 +52,13 @@ class CoreDataManager {
     func getAirport(byIdentifier identifier: String, result: @escaping (AirportInfo) -> Void) {
         let context = appDelegate.persistentContainer.newBackgroundContext()
         appDelegate.persistentContainer.performBackgroundTask { _ in
-            do {
+            do {                                                            // можно ли как то ограничить количество запросов?
                 let fetchRequest: NSFetchRequest<Airport> = Airport.fetchRequest()
                 fetchRequest.predicate = NSPredicate(format: "code == %@", identifier)
                 fetchRequest.returnsObjectsAsFaults = false
                 let fetchedResults = try context.fetch(fetchRequest)
                 if let airport = fetchedResults.first {
-                    DispatchQueue.main.async {
+                    DispatchQueue.main.async {                           
                         result(AirportInfo(country: airport.country ?? "", name: airport.name ?? "", city: airport.city ?? "", code: airport.code ?? ""))
                     }
                 }

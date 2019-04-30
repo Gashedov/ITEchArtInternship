@@ -49,7 +49,7 @@ class FlightInfoViewController: UIViewController, UITableViewDelegate, UITableVi
     override func viewWillAppear(_ animated: Bool) {
     }
 
-    // MARK: - Table view data source
+// MARK: - Table view data source
 
     func numberOfSections(in tableView: UITableView) -> Int {
         return viewModel.data.count
@@ -69,16 +69,17 @@ class FlightInfoViewController: UIViewController, UITableViewDelegate, UITableVi
             return UITableViewCell()
         }
         let airport = viewModel?.data[viewModel.data.keys.sorted()[indexPath.section]]?[indexPath.row]
-        //cell.setValues()
+        cell.setValues(name: airport?.airportName ?? "N/A", arrivalTime: airport?.arrivalTime ?? "N/A", departureTime: airport?.departureTime ?? "N/A")
         return cell
     }
 }
+
+// MARK: - Extensions
 
 extension FlightInfoViewController: FlightsViewModelDelegate {
     func dataReceived() {
         tableView.reloadData()
         if viewModel.data.isEmpty {
-            // видит что данные пустые и вызывает алерт
             self.present(alert, animated: true, completion: nil)
         }
     }

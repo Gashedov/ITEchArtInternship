@@ -59,8 +59,9 @@ class FlightInfoViewModel {
 
     // MARK: - private methods
 
-    private func getDataFromNetwork(path: Path, uponRequestParametrs request: [String: String], success: @escaping (_ data: [RawFlightInfo]) -> Void,
-                                                                   failure: @escaping (_ error: Error?) -> Void) {
+    private func getDataFromNetwork(path: Path, uponRequestParametrs request: [String: String],
+                                    success: @escaping (_ data: [RawFlightInfo]) -> Void,
+                                    failure: @escaping (_ error: Error?) -> Void) {
         httpClient.getFlightInfo(requestType: path, components: request, success: { (airports) in
             success(airports)
         }, failure: { error in
@@ -92,14 +93,14 @@ class FlightInfoViewModel {
 
             switch dataType {
             case .arrival:
-                coreDataManager.getAirport(byIdentifier: flightInfo.arrivalAirportCode ?? "", result: { coreDataAirport in
-                    airportName = coreDataAirport.name ?? ""
-                    })
+                getAirportFromCoreData(identifier: flightInfo.arrivalAirportCode ?? "", success: { (name) in
+                    airportName = name
+                })
                 key = dateManager.convertDateToString(time: flightInfo.arrivalTime ?? 0)
             case .departure:
-                coreDataManager.getAirport(byIdentifier: flightInfo.departureAirportCode ?? "", result: { coreDataAirport in
-                    airportName = coreDataAirport.name ?? ""
-                    })
+                getAirportFromCoreData(identifier: flightInfo.departureAirportCode ?? "", success: { (name) in
+                    airportName = name
+                })
                 key = dateManager.convertDateToString(time: flightInfo.departureTime ?? 0)
             }
 
@@ -110,5 +111,12 @@ class FlightInfoViewModel {
             }
         }
         return result
+    }
+
+    private func getAirportFromCoreData(identifier: String,
+                                        success: @escaping (_ data: String) -> Void) {
+        coreDataManager.getAirport(byIdentifier: identifier, result: { coreDataAirport in
+                success(coreDataAirport.name ?? "Nil")
+        })
     }
 }

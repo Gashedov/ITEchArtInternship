@@ -77,50 +77,43 @@
                                                     <rect key="frame" x="0.0" y="0.0" width="375" height="89.5"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
-                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Airport:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dJ0-i2-tyM">
-                                                            <rect key="frame" x="15" y="11" width="58" height="21"/>
-                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Airport" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RQE-bn-vRw">
+                                                            <rect key="frame" x="15" y="11" width="345" height="20.5"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                             <nil key="textColor"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
-                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Arrival:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Vty-qA-m8R">
-                                                            <rect key="frame" x="15" y="34" width="54" height="21"/>
-                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Arrirval" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NoM-F9-sTg">
+                                                            <rect key="frame" x="15" y="39.5" width="345" height="20.5"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                             <nil key="textColor"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
-                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Departure:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9ij-96-5gE">
-                                                            <rect key="frame" x="15" y="58" width="82" height="21"/>
-                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                            <nil key="textColor"/>
-                                                            <nil key="highlightedColor"/>
-                                                        </label>
-                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="N/A" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RQE-bn-vRw">
-                                                            <rect key="frame" x="166" y="11" width="29" height="21"/>
-                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                            <nil key="textColor"/>
-                                                            <nil key="highlightedColor"/>
-                                                        </label>
-                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="N/A" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NoM-F9-sTg">
-                                                            <rect key="frame" x="166" y="34" width="29" height="21"/>
-                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                            <nil key="textColor"/>
-                                                            <nil key="highlightedColor"/>
-                                                        </label>
-                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="N/A" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0z0-h6-eKK">
-                                                            <rect key="frame" x="166" y="58" width="29" height="21"/>
-                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Departure" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0z0-h6-eKK">
+                                                            <rect key="frame" x="15" y="61" width="360" height="20.5"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                             <nil key="textColor"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                     </subviews>
+                                                    <constraints>
+                                                        <constraint firstItem="RQE-bn-vRw" firstAttribute="leading" secondItem="yiM-ep-bnn" secondAttribute="leadingMargin" id="0Fd-kG-DxP"/>
+                                                        <constraint firstItem="RQE-bn-vRw" firstAttribute="top" secondItem="yiM-ep-bnn" secondAttribute="topMargin" id="FQy-vI-7gE"/>
+                                                        <constraint firstItem="0z0-h6-eKK" firstAttribute="top" secondItem="NoM-F9-sTg" secondAttribute="bottom" constant="8" id="G35-U3-C4c"/>
+                                                        <constraint firstItem="NoM-F9-sTg" firstAttribute="leading" secondItem="yiM-ep-bnn" secondAttribute="leadingMargin" id="R6T-vZ-hjr"/>
+                                                        <constraint firstAttribute="trailing" secondItem="0z0-h6-eKK" secondAttribute="trailing" id="XkS-8N-60o"/>
+                                                        <constraint firstItem="NoM-F9-sTg" firstAttribute="top" secondItem="RQE-bn-vRw" secondAttribute="bottom" constant="8" id="ePK-xP-5DQ"/>
+                                                        <constraint firstAttribute="bottom" secondItem="0z0-h6-eKK" secondAttribute="bottom" constant="8" id="lgf-M8-9Zf"/>
+                                                        <constraint firstAttribute="trailingMargin" secondItem="RQE-bn-vRw" secondAttribute="trailing" id="pUC-GS-XuN"/>
+                                                        <constraint firstAttribute="trailingMargin" secondItem="NoM-F9-sTg" secondAttribute="trailing" id="tmp-lh-AjM"/>
+                                                        <constraint firstItem="0z0-h6-eKK" firstAttribute="leading" secondItem="yiM-ep-bnn" secondAttribute="leadingMargin" id="uch-Dh-RL8"/>
+                                                    </constraints>
                                                 </tableViewCellContentView>
+                                                <connections>
+                                                    <outlet property="airportNameLabel" destination="RQE-bn-vRw" id="Dwt-by-VOo"/>
+                                                    <outlet property="arrivalTimeLabel" destination="NoM-F9-sTg" id="5cq-O4-Sgx"/>
+                                                    <outlet property="departureTimeLabel" destination="0z0-h6-eKK" id="eU5-Fg-7sM"/>
+                                                </connections>
                                             </tableViewCell>
                                         </prototypes>
                                     </tableView>

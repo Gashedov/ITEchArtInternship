@@ -29,20 +29,20 @@ class MasterViewController: UIViewController {
                 self.controllers.append(controller)
             }
         }
-        
+
         add(asChildViewController: controllers[0])
     }
 
     @objc func selectionDidChange(_ sender: UISegmentedControl) {
         updateView()
     }
-    
+
     func setAirportCode(code: String) {
         airportCode = code
     }
 
-    // MARK:- Private methods
-    
+// MARK: - Private methods
+
     private func prepareViewController(_ flightType: FlightType) -> FlightInfoViewController? {
         guard let controller = self.navigationController?.storyboard?.instantiateViewController(withIdentifier: "FlightInfoViewController") as? FlightInfoViewController else {
             return nil
@@ -81,13 +81,13 @@ class MasterViewController: UIViewController {
     }
 
     private func updateView() {                                 //придумать как грамотно переключить вью
-//        if segmentedControl.selectedSegmentIndex == 0 {
-//            remove(asChildViewController: departureViewController)
-//            add(asChildViewController: arrivalViewController)
-//        } else {
-//            remove(asChildViewController: arrivalViewController)
-//            add(asChildViewController: departureViewController)
-//        }
+        if segmentedControl.selectedSegmentIndex == 0 {
+            remove(asChildViewController: controllers[1])
+            add(asChildViewController: controllers[0])
+        } else {
+            remove(asChildViewController: controllers[0])
+            add(asChildViewController: controllers[1])
+        }
         
     }
 }
