@@ -34,7 +34,7 @@ class AirportsViewModel {
             self.dataToDisplay = self.data
             self.delegate?.receivedData()
         }, failure: { error in
-            print("Error: \(String(describing: error))")
+            NSLog("Error: \(String(describing: error))")
         })
 
         self.getDataFromNetwork(success: { data in
@@ -46,7 +46,7 @@ class AirportsViewModel {
 
             self.saveDataToDataBase(data)
         }, failure: { error in
-            print("Error: \(String(describing: error))")
+            NSLog("Error: \(String(describing: error))")
         })
     }
 
@@ -94,7 +94,9 @@ class AirportsViewModel {
                 let attributes = airports.value.map({ airport -> Attributs in
                     return Attributs(city: airport.city, airportName: airport.name, code: airport.code)
                 })
-                let displayData = SheduleInfoToDisplay(isOpen: false, airportCountry: airports.key, airportAttributs: attributes)
+                let displayData = SheduleInfoToDisplay(isOpen: false,
+                                                       airportCountry: airports.key,
+                                                       airportAttributs: attributes)
                 result.append(displayData)
             })
             .sorted(by: { $0.airportCountry < $1.airportCountry })

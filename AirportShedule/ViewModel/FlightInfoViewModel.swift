@@ -43,7 +43,7 @@ class FlightInfoViewModel {
                 self.delegate?.dataReceived()
 
             }, failure: { error in
-                print("Error: \(String(describing: error))")
+                NSLog("Error: \(String(describing: error))")
             })
         case .departure:
             self.getDataFromNetwork(path: .departureRequest, uponRequestParametrs: request, success: { data in
@@ -51,7 +51,7 @@ class FlightInfoViewModel {
                 self.delegate?.dataReceived()
 
             }, failure: { error in
-                print("Error: \(String(describing: error))")
+                NSLog("Error: \(String(describing: error))")
             })
         }
 
@@ -59,7 +59,7 @@ class FlightInfoViewModel {
 
     // MARK: - private methods
 
-    private func getDataFromNetwork(path: Path, uponRequestParametrs request: [String: String],
+    private func getDataFromNetwork(path: openSkyAPIRequestPath, uponRequestParametrs request: [String: String],
                                     success: @escaping (_ data: [RawFlightInfo]) -> Void,
                                     failure: @escaping (_ error: Error?) -> Void) {
         httpClient.getFlightInfo(requestType: path, components: request, success: { (airports) in
@@ -103,11 +103,14 @@ class FlightInfoViewModel {
                 })
                 key = dateManager.convertDateToString(time: flightInfo.departureTime ?? 0)
             }
-
             if result[key] != nil {
-                result[key]?.append(FlightInfoToDisplay(airportName: airportName, arrivalTime: arrivalTime, departureTime: departureTime))
+                result[key]?.append(FlightInfoToDisplay(airportName: airportName,
+                                                        arrivalTime: arrivalTime,
+                                                        departureTime: departureTime))
             } else {
-                result[key] = [FlightInfoToDisplay(airportName: airportName, arrivalTime: arrivalTime, departureTime: departureTime)]
+                result[key] = [FlightInfoToDisplay(airportName: airportName,
+                                                   arrivalTime: arrivalTime,
+                                                   departureTime: departureTime)]
             }
         }
         return result

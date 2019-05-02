@@ -8,38 +8,55 @@
 
 import Foundation
 
-enum Path: String {
+enum openSkyAPIRequestPath: String {
     case departureRequest = "flights/departure"
     case arrivalRequest =  "flights/arrival"
+}
+
+enum HTTPClientError: Error{
+    case urlGettingError
+    case sessionDataTaskError
+    case emptyDataTaskError
+    
+    var description: String {
+        switch self {
+        case .urlGettingError:
+            return "Could not generate url"
+        case .sessionDataTaskError:
+            return "Data task throw an error"
+        case .emptyDataTaskError:
+            return "Could not get data from data task"
+        }
+    }
 }
 
 class HTTPClient {
 
     let baseFlightInfoPath = "https://opensky-network.org/api/"
 
-    func getFlightInfo (requestType: Path, components: [String: String], success: @escaping ([RawFlightInfo]) -> Void,
-                                                    failure: @escaping (_ error: Error?) -> Void) {
+    func getFlightInfo (requestType: openSkyAPIRequestPath, components: [String: String], success: @escaping ([RawFlightInfo]) -> Void,
+                                                    failure: @escaping (HTTPClientError) -> Void) {
         let basePath = baseFlightInfoPath + requestType.rawValue
         var urlComponents = URLComponents(string: basePath)
         urlComponents?.queryItems = parseRequest(requests: components)
 
         guard let url = urlComponents?.url! else {
-            return failure(NSError(domain: "", code: 404, userInfo: nil))
+            return failure(.urlGettingError)
         }
 
         let urlRequest = URLRequest(url: url)
-        print(urlRequest)
+        NSLog("Url genereted: \(urlRequest)")
         let session = URLSession(configuration: .default)
 
         let task = session.dataTask(with: urlRequest) { (data, _, error) in
 
             guard error == nil else {
-                failure(error!)
+                failure(.sessionDataTaskError)
                 return
             }
 
             guard let responseData = data else {
-                print("Error: did not receive data")
+                failure(.emptyDataTaskError)
                 return
             }
 
@@ -52,9 +69,9 @@ class HTTPClient {
     }
 
     func getAirportInfo(success: @escaping ([AirportInfo]) -> Void,
-                        failure: @escaping (_ error: Error?) -> Void) {
+                        failure: @escaping (HTTPClientError) -> Void) {
         guard let url = URL(string: "https://raw.githubusercontent.com/ram-nadella/airport-codes/master/airports.json") else {
-            return failure(NSError(domain: "", code: 404, userInfo: nil))
+            return failure(.urlGettingError)
         }
 
         let urlRequest = URLRequest(url: url)
@@ -63,12 +80,12 @@ class HTTPClient {
 
         let task = session.dataTask(with: urlRequest) { (data, _, error) in
             guard error == nil else {
-                failure(error!)
+                failure(.sessionDataTaskError)
                 return
             }
 
             guard let responseData = data else {
-                print("Error: did not receive data")
+                failure(.emptyDataTaskError)
                 return
             }
 

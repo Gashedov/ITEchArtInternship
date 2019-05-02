@@ -13,7 +13,7 @@ class SheduleTableViewController: UIViewController {
     private let viewModel = AirportsViewModel(appDelegate: UIApplication.shared.delegate as? AppDelegate ?? AppDelegate())
     private let searchController = UISearchController(searchResultsController: nil)
     @IBOutlet weak var tableView: UITableView!
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         viewModel.delegate = self
@@ -47,7 +47,6 @@ class SheduleTableViewController: UIViewController {
     }
 
 
-
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         super.prepare(for: segue, sender: sender)
 
@@ -56,7 +55,7 @@ class SheduleTableViewController: UIViewController {
         }
 
         guard let selectedAirportCell = sender as? TimetableViewCell else {
-            fatalError("Unexpected sender: \(sender)")
+            fatalError("Unexpected sender: \(String(describing: sender))")
         }
 
         guard let indexPath = tableView.indexPath(for: selectedAirportCell) else {
@@ -74,7 +73,7 @@ extension SheduleTableViewController: UITableViewDataSource {
         // #warning Incomplete implementation, return the number of sections
         return viewModel.dataToDisplay.count
     }
-    
+
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if viewModel.dataToDisplay[section].isOpen {
             return viewModel.dataToDisplay[section].airportAttributs.count
@@ -100,7 +99,7 @@ extension SheduleTableViewController: UITableViewDelegate {
         button.titleLabel?.textAlignment = .left
         button.tag = section
         button.addTarget(self, action: #selector(hendleExpandClose), for: .touchUpInside)
-        
+
         return button
     }
 }
@@ -108,7 +107,7 @@ extension SheduleTableViewController: UITableViewDelegate {
 extension SheduleTableViewController: AirportsViewModelDelegate {
     func receivedData() {
         tableView.reloadData()
-        print(viewModel.dataToDisplay.isEmpty ? "data is empty" : "data updated")
+        NSLog(viewModel.dataToDisplay.isEmpty ? "data is empty" : "data updated")
     }
 }
 

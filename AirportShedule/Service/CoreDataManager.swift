@@ -9,6 +9,29 @@
 import Foundation
 import CoreData
 
+enum DataBaseError: Error {
+    case loadDataError
+    case saveDataError
+    case deleteDataError
+    case filteringError
+    case nilField
+    
+    var description: String {
+        switch self {
+        case .loadDataError:
+            return "Could not load airports."
+        case .saveDataError:
+            return "Could not save data."
+        case .deleteDataError:
+            return "Could not delete data."
+        case .filteringError:
+            return "Could not find the requested field"
+        case .nilField:
+            return "Requested field is nil"
+        }
+    }
+}
+
 class CoreDataManager {
 
     private let appDelegate: AppDelegate
@@ -17,8 +40,9 @@ class CoreDataManager {
         self.appDelegate = appDelegate
     }
 
-    func loadDataFromDB(callback: @escaping ([AirportInfo], Error?) -> Void) {
-        print("load Data from DB")
+    func loadDataFromDB(success: @escaping ([AirportInfo]) -> Void,
+                        failure: @escaping (DataBaseError) -> Void) {
+        NSLog("Load Data from DB")
 
         let context = appDelegate.persistentContainer.newBackgroundContext() //viewContext
 
@@ -28,14 +52,17 @@ class CoreDataManager {
                 let request: NSFetchRequest<Airport> = Airport.fetchRequest()
                 let airportResult = try context.fetch(request)
                 for airport in airportResult {
-                    downloadedData.append(AirportInfo(country: airport.country ?? "", name: airport.name ?? "", city: airport.city ?? "", code: airport.code ?? ""))
+                    downloadedData.append(AirportInfo(country: airport.country ?? "",
+                                                      name: airport.name ?? "",
+                                                      city: airport.city ?? "",
+                                                      code: airport.code ?? ""))
                 }
-            } catch let error as NSError {
-                print("Could not save \(error)")
+            } catch _ as NSError {
+                failure(.loadDataError)
             }
-            print("Data loaded")
+            NSLog("Data loaded")
             DispatchQueue.main.async {
-                callback(downloadedData, nil)
+                success(downloadedData)
             }
         }
     }
@@ -52,18 +79,21 @@ class CoreDataManager {
     func getAirport(byIdentifier identifier: String, result: @escaping (AirportInfo) -> Void) {
         let context = appDelegate.persistentContainer.newBackgroundContext()
         appDelegate.persistentContainer.performBackgroundTask { _ in
-            do {                                                            // можно ли как то ограничить количество запросов?
+            do {// можно ли как то ограничить количество запросов?
                 let fetchRequest: NSFetchRequest<Airport> = Airport.fetchRequest()
                 fetchRequest.predicate = NSPredicate(format: "code == %@", identifier)
                 fetchRequest.returnsObjectsAsFaults = false
                 let fetchedResults = try context.fetch(fetchRequest)
                 if let airport = fetchedResults.first {
-                    DispatchQueue.main.async {                           
-                        result(AirportInfo(country: airport.country ?? "", name: airport.name ?? "", city: airport.city ?? "", code: airport.code ?? ""))
+                    DispatchQueue.main.async {
+                        result(AirportInfo(country: airport.country ?? "",
+                                           name: airport.name ?? "",
+                                           city: airport.city ?? "",
+                                           code: airport.code ?? ""))
                     }
                 }
             } catch {
-                print ("fetch task failed", error)
+                NSLog(DataBaseError.saveDataError.description)
             }
         }
     }
@@ -78,16 +108,16 @@ class CoreDataManager {
             for object in results {
                 context.delete(object)
             }
-            print("objects deleted ")
-        } catch let error {
-            print("Detele all data error :", error)
+            NSLog("Objects deleted")
+        } catch _ {
+            NSLog(DataBaseError.deleteDataError.description)
         }
     }
 
     private func backgroundSaveAirports(airports: [AirportInfo], context: NSManagedObjectContext) {
 
         context.perform {
-            print("Start save data to DB")
+            NSLog("Start save data to DB")
             for airport in airports {
                 guard let coreDataAirport = NSEntityDescription.insertNewObject(forEntityName: "Airport", into: context) as? Airport else {
                     return
@@ -99,10 +129,10 @@ class CoreDataManager {
             }
             do {
                 try context.save()
-            } catch let error as NSError {
-                print("Could not save \(error)")
+            } catch _ as NSError {
+                NSLog(DataBaseError.saveDataError.description)
             }
-            print("Data saved")
+            NSLog("Data saved")
         }
  }
 }

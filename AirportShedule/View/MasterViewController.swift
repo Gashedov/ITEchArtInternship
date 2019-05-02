@@ -19,7 +19,7 @@ class MasterViewController: UIViewController {
     @IBOutlet weak var embededView: UIView!
     var airportCode: String = ""
     var controllers: [UIViewController] = []
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
@@ -50,7 +50,7 @@ class MasterViewController: UIViewController {
         // sending the necessary information
         controller.airportCode = self.airportCode
         controller.flightType = flightType
-        
+
         return controller
     }
 
@@ -74,20 +74,17 @@ class MasterViewController: UIViewController {
         viewController.didMove(toParent: self)
     }
 
-    private func remove(asChildViewController viewController: UIViewController) {
-        viewController.willMove(toParent: nil)
-        viewController.view.removeFromSuperview()
-        viewController.removeFromParent()
+    private func removeAllViewControllers() {
+        // this function will need refactoring if the controllers implement viewWillAppear()
+        for viewController in controllers {
+            viewController.willMove(toParent: nil)
+            viewController.view.removeFromSuperview()
+            viewController.removeFromParent()
+        }
     }
 
-    private func updateView() {                                 //придумать как грамотно переключить вью
-        if segmentedControl.selectedSegmentIndex == 0 {
-            remove(asChildViewController: controllers[1])
-            add(asChildViewController: controllers[0])
-        } else {
-            remove(asChildViewController: controllers[0])
-            add(asChildViewController: controllers[1])
-        }
-        
+    private func updateView() {
+        removeAllViewControllers()
+        add(asChildViewController: controllers[segmentedControl.selectedSegmentIndex])
     }
 }
