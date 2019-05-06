@@ -43,7 +43,7 @@ class FlightInfoViewModel {
                 self.delegate?.dataReceived()
 
             }, failure: { error in
-                NSLog("Error: \(String(describing: error))")
+                NSLog("Error: \(String(describing: error.description))")
             })
         case .departure:
             self.getDataFromNetwork(path: .departureRequest, uponRequestParametrs: request, success: { data in
@@ -51,7 +51,7 @@ class FlightInfoViewModel {
                 self.delegate?.dataReceived()
 
             }, failure: { error in
-                NSLog("Error: \(String(describing: error))")
+                NSLog("Error: \(String(describing: error.description))")
             })
         }
 
@@ -59,16 +59,13 @@ class FlightInfoViewModel {
 
     // MARK: - private methods
 
-    private func getDataFromNetwork(path: openSkyAPIRequestPath, uponRequestParametrs request: [String: String],
+    private func getDataFromNetwork(path: OpenSkyAPIRequestPath, uponRequestParametrs request: [String: String],
                                     success: @escaping (_ data: [RawFlightInfo]) -> Void,
-                                    failure: @escaping (_ error: Error?) -> Void) {
+                                    failure: @escaping (HTTPClientError) -> Void) {
         httpClient.getFlightInfo(requestType: path, components: request, success: { (airports) in
             success(airports)
         }, failure: { error in
-            if let error = error {
-                failure(error)
-                return
-            }
+               failure(error)
         })
     }
 
@@ -86,6 +83,7 @@ class FlightInfoViewModel {
 
         for flightInfo in data {
 
+            let flightCode = flightInfo.code
             let arrivalTime = dateManager.convertTimeToString(time: flightInfo.arrivalTime ?? 0)
             let departureTime = dateManager.convertTimeToString(time: flightInfo.departureTime ?? 0)
             var airportName = ""
@@ -106,11 +104,13 @@ class FlightInfoViewModel {
             if result[key] != nil {
                 result[key]?.append(FlightInfoToDisplay(airportName: airportName,
                                                         arrivalTime: arrivalTime,
-                                                        departureTime: departureTime))
+                                                        departureTime: departureTime,
+                                                        flightCode: flightCode))
             } else {
                 result[key] = [FlightInfoToDisplay(airportName: airportName,
                                                    arrivalTime: arrivalTime,
-                                                   departureTime: departureTime)]
+                                                   departureTime: departureTime,
+                                                   flightCode: flightCode)]
             }
         }
         return result

@@ -50,7 +50,7 @@ class SheduleTableViewController: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         super.prepare(for: segue, sender: sender)
 
-        guard let flightInfoViewController = segue.destination as? MasterViewController else {
+        guard let flightInfoViewController = segue.destination as? MasterFlighInfoViewController else {
             fatalError("Unexpected destination: \(segue.destination)")
         }
 
@@ -81,7 +81,7 @@ extension SheduleTableViewController: UITableViewDataSource {
             return 0
         }
     }
-    
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "TimetableViewCellReuseIdentifier", for: indexPath) as! TimetableViewCell
         let airport = viewModel.dataToDisplay[indexPath.section].airportAttributs[indexPath.row]

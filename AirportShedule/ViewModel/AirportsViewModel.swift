@@ -62,25 +62,20 @@ class AirportsViewModel {
     // MARK: - Private methods
 
     private func getDataFromDataBase(success: @escaping (_ data: [AirportInfo]) -> Void,
-                                     failure: @escaping (_ error: Error?) -> Void) {
-        coreDataManager.loadDataFromDB { data, error in
-            if data.isEmpty {
-                failure(error)
-                return
-            }
-            success(data)
-        }
+                                     failure: @escaping (DataBaseError) -> Void) {
+        coreDataManager.loadDataFromDB (success: { (airports) in
+            success(airports)
+        }, failure: { error in
+            failure(error)
+        })
     }
 
     private func getDataFromNetwork(success: @escaping (_ data: [AirportInfo]) -> Void,
-                                    failure: @escaping (_ error: Error?) -> Void) {
+                                    failure: @escaping (HTTPClientError) -> Void) {
         httpClient.getAirportInfo(success: { (airports) in
             success(airports)
             }, failure: { error in
-                    if let error = error {
                     failure(error)
-                        return
-                    }
                 })
         }
 

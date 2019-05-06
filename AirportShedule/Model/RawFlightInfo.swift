@@ -13,6 +13,7 @@ struct RawFlightInfo {
     var departureAirportCode: String?
     var arrivalTime: Int?
     var departureTime: Int?
+    var code: String?
 }
 
 extension RawFlightInfo: Decodable {
@@ -21,5 +22,6 @@ extension RawFlightInfo: Decodable {
         case departureAirportCode = "estDepartureAirport" // code "FFDD"
         case arrivalTime = "lastSeen"
         case departureTime = "firstSeen"
+        case code = "icao24"
     }
 }

@@ -13,7 +13,7 @@ enum FlightType: CaseIterable {
     case departure
 }
 
-class MasterViewController: UIViewController {
+class MasterFlighInfoViewController: UIViewController {
     
     @IBOutlet weak var segmentedControl: UISegmentedControl!
     @IBOutlet weak var embededView: UIView!

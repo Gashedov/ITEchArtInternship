@@ -10,10 +10,10 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Master View Controller-->
+        <!--Master Fligh Info View Controller-->
         <scene sceneID="mJe-Vz-PM3">
             <objects>
-                <viewController id="aJi-t3-5l8" customClass="MasterViewController" customModule="AirportShedule" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="aJi-t3-5l8" customClass="MasterFlighInfoViewController" customModule="AirportShedule" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="oz5-J1-97b">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="603"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -54,6 +54,35 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="86w-En-ask" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="478" y="-188"/>
+        </scene>
+        <!--Detail Flight Info View Controller-->
+        <scene sceneID="V0e-4V-OKJ">
+            <objects>
+                <viewController id="aZ4-nH-yYu" customClass="DetailFlightInfoViewController" customModule="AirportShedule" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="wcs-FJ-s6z">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="PlanePlaceholder" translatesAutoresizingMaskIntoConstraints="NO" id="AQp-Kg-hjB">
+                                <rect key="frame" x="40" y="20" width="295" height="127"/>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="AQp-Kg-hjB" firstAttribute="leading" secondItem="1H9-8t-jB8" secondAttribute="leading" constant="40" id="IRL-uI-JsT"/>
+                            <constraint firstItem="1H9-8t-jB8" firstAttribute="trailing" secondItem="AQp-Kg-hjB" secondAttribute="trailing" constant="40" id="RjP-pu-8o4"/>
+                            <constraint firstItem="1H9-8t-jB8" firstAttribute="bottom" secondItem="AQp-Kg-hjB" secondAttribute="bottom" constant="520" id="htq-hf-pIp"/>
+                            <constraint firstItem="AQp-Kg-hjB" firstAttribute="top" secondItem="1H9-8t-jB8" secondAttribute="top" id="q6k-ra-eS8"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="1H9-8t-jB8"/>
+                    </view>
+                    <connections>
+                        <outlet property="planeImage" destination="AQp-Kg-hjB" id="NA3-oB-iI2"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="hT3-Gp-Xvj" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1322" y="-188"/>
         </scene>
         <!--Flight info-->
         <scene sceneID="j9A-Wk-vdF">
@@ -113,6 +142,7 @@
                                                     <outlet property="airportNameLabel" destination="RQE-bn-vRw" id="Dwt-by-VOo"/>
                                                     <outlet property="arrivalTimeLabel" destination="NoM-F9-sTg" id="5cq-O4-Sgx"/>
                                                     <outlet property="departureTimeLabel" destination="0z0-h6-eKK" id="eU5-Fg-7sM"/>
+                                                    <segue destination="aZ4-nH-yYu" kind="show" id="0UQ-3G-6Wb"/>
                                                 </connections>
                                             </tableViewCell>
                                         </prototypes>
@@ -136,7 +166,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zyi-ti-3N7" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="478" y="-874"/>
+            <point key="canvasLocation" x="478" y="-963"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="fNL-P0-b4Z">
@@ -234,4 +264,7 @@
             <point key="canvasLocation" x="-372" y="-188"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="PlanePlaceholder" width="750" height="550.5"/>
+    </resources>
 </document>

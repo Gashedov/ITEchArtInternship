@@ -49,7 +49,7 @@ class FlightInfoViewController: UIViewController, UITableViewDelegate, UITableVi
             }}))
         viewModel?.getData()
     }
-    
+
 // MARK: - Table view data source
 
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -66,7 +66,8 @@ class FlightInfoViewController: UIViewController, UITableViewDelegate, UITableVi
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "FlightInfoCell") as? FlightInfoTableViewCell else {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "FlightInfoCell")
+            as? FlightInfoTableViewCell else {
             return UITableViewCell()
         }
         let airport = viewModel?.data[viewModel.data.keys.sorted()[indexPath.section]]?[indexPath.row]
@@ -74,6 +75,28 @@ class FlightInfoViewController: UIViewController, UITableViewDelegate, UITableVi
                        arrivalTime: airport?.arrivalTime ?? "N/A",
                        departureTime: airport?.departureTime ?? "N/A")
         return cell
+    }
+
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        super.prepare(for: segue, sender: sender)
+
+        guard let detailInfoViewController = segue.destination as? DetailFlightInfoViewController else {
+            fatalError("Unexpected destination: \(segue.destination)")
+        }
+
+        guard let selectedAirportCell = sender as? FlightInfoTableViewCell else {
+            fatalError("Unexpected sender: \(String(describing: sender))")
+        }
+
+        guard let indexPath = tableView.indexPath(for: selectedAirportCell) else {
+            fatalError("The selected cell is not being displayed by the table")
+        }
+
+        guard let selectedFlight = viewModel?.data[viewModel.data.keys.sorted()[indexPath.section]]?[indexPath.row].flightCode else { return
+
+        }
+        detailInfoViewController.setAirplaneCode(code: selectedFlight)
+
     }
 }
 

@@ -15,7 +15,7 @@ enum DataBaseError: Error {
     case deleteDataError
     case filteringError
     case nilField
-    
+
     var description: String {
         switch self {
         case .loadDataError:
