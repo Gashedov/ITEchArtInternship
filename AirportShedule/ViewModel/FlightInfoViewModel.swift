@@ -16,56 +16,68 @@ class FlightInfoViewModel {
 
     weak var delegate: FlightsViewModelDelegate?
 
-    var data: [String: [FlightInfoToDisplay]]
+    var data = [String: [FlightInfoToDisplay]]()
+    
+    private var rawData = [RawFlightInfo]()
+    private var airports = [AirportInfo]()
     private let httpClient: HTTPClient
     private let coreDataManager: CoreDataManager
     private let dateManager: DateManager
     private let dataType: FlightType
     private let airportCode: String
+    
+    private var group: DispatchGroup?
 
     init(appDelegate: AppDelegate, dataType: FlightType, airportCode: String) {
         coreDataManager = CoreDataManager(appDelegate: appDelegate)
-        data = [:]
         httpClient = HTTPClient()
         dateManager = DateManager()
         self.dataType = dataType
         self.airportCode = airportCode
+        group = DispatchGroup()
     }
 
     func getData() {
-
-        let request = generateRequest(airportCode: airportCode)
-
-        switch dataType {
-        case .arrival:
-            self.getDataFromNetwork(path: .arrivalRequest, uponRequestParametrs: request, success: { data in
-                self.data = self.prepareToDisplay(data: data)
-                self.delegate?.dataReceived()
-
-            }, failure: { error in
-                NSLog("Error: \(String(describing: error.description))")
-            })
-        case .departure:
-            self.getDataFromNetwork(path: .departureRequest, uponRequestParametrs: request, success: { data in
-                self.data = self.prepareToDisplay(data: data)
-                self.delegate?.dataReceived()
-
-            }, failure: { error in
-                NSLog("Error: \(String(describing: error.description))")
-            })
-        }
-
+        getRawData()
+        getAirports()
+        
+        group?.notify(queue: DispatchQueue.main, execute: {
+            self.prepareToDisplay()
+            self.delegate?.dataReceived()
+        })
     }
 
+    func getFlightCode(by index: IndexPath) -> String? {
+        let key = data.keys.sorted()[index.section]
+        if let airport = data[key]?[index.row] {
+            return airport.code
+        }
+        
+        return nil
+    }
+    
     // MARK: - private methods
-
-    private func getDataFromNetwork(path: OpenSkyAPIRequestPath, uponRequestParametrs request: [String: String],
-                                    success: @escaping (_ data: [RawFlightInfo]) -> Void,
-                                    failure: @escaping (HTTPClientError) -> Void) {
-        httpClient.getFlightInfo(requestType: path, components: request, success: { (airports) in
-            success(airports)
+    
+    private func getRawData() {
+        let request = generateRequest(airportCode: airportCode)
+        let type = dataType == .arrival ? OpenSkyAPIRequestPath.arrivalRequest : OpenSkyAPIRequestPath.departureRequest
+        
+        group?.enter()
+        httpClient.getFlightInfo(requestType: type, components: request, success: { data in
+            self.group?.leave()
+            self.rawData = data
         }, failure: { error in
-               failure(error)
+            NSLog("Error: \(String(describing: error.description))")
+        })
+    }
+    
+    private func getAirports() {
+        group?.enter()
+        coreDataManager.loadDataFromDB(success: { data in
+            self.group?.leave()
+            self.airports = data
+        }, failure: { error in
+            NSLog("Error: \(String(describing: error.description))")
         })
     }
 
@@ -78,42 +90,48 @@ class FlightInfoViewModel {
         return request
     }
 
-    private func prepareToDisplay(data: [RawFlightInfo]) -> [String: [FlightInfoToDisplay]] {
+    private func prepareToDisplay() {
         var result: [String: [FlightInfoToDisplay]] = [:]
 
-        for flightInfo in data {
-
-            let flightCode = flightInfo.code
+        for flightInfo in rawData {
             let arrivalTime = dateManager.convertTimeToString(time: flightInfo.arrivalTime ?? 0)
             let departureTime = dateManager.convertTimeToString(time: flightInfo.departureTime ?? 0)
-            var airportName = ""
+            var airportName = "N/A"
+            
+            let lookingCode = dataType == .arrival ? flightInfo.departureAirportCode : flightInfo.arrivalAirportCode
+            
+            if let code = lookingCode {
+                airportName = airports.first(where: { $0.code == code })?.name ?? "N/A"
+            }
             var key = ""
 
             switch dataType {
             case .arrival:
-                getAirportFromCoreData(identifier: flightInfo.arrivalAirportCode ?? "", success: { (name) in
-                    airportName = name
-                })
+//                getAirportFromCoreData(identifier: flightInfo.arrivalAirportCode ?? "", success: { (name) in
+//                    airportName = name
+//                })
                 key = dateManager.convertDateToString(time: flightInfo.arrivalTime ?? 0)
             case .departure:
-                getAirportFromCoreData(identifier: flightInfo.departureAirportCode ?? "", success: { (name) in
-                    airportName = name
-                })
+//                getAirportFromCoreData(identifier: flightInfo.departureAirportCode ?? "", success: { (name) in
+//                    airportName = name
+//                })
                 key = dateManager.convertDateToString(time: flightInfo.departureTime ?? 0)
             }
+            
             if result[key] != nil {
                 result[key]?.append(FlightInfoToDisplay(airportName: airportName,
                                                         arrivalTime: arrivalTime,
                                                         departureTime: departureTime,
-                                                        flightCode: flightCode))
+                                                        code: flightInfo.code))
             } else {
                 result[key] = [FlightInfoToDisplay(airportName: airportName,
                                                    arrivalTime: arrivalTime,
                                                    departureTime: departureTime,
-                                                   flightCode: flightCode)]
+                                                   code: flightInfo.code)]
             }
         }
-        return result
+        
+        data = result
     }
 
     private func getAirportFromCoreData(identifier: String,

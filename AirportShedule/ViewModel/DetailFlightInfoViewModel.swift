@@ -9,7 +9,8 @@
 import Foundation
 
 protocol DetailFlightInfoViewModelDelegate: class {
-    func dataReceived()
+    func aircraftDataReceived()
+    func imageDataReceived()
 }
 
 class DetailFlightInfoViewModel {
@@ -41,6 +42,7 @@ class DetailFlightInfoViewModel {
     private func getAircraftInfo(code: String) {
         httpclient.getAircraftInfo(icao: code, success: { aircraft in
                 self.data.aircraft = aircraft
+                self.delegate?.aircraftDataReceived()
         }) { error in
             NSLog("Error: \(String(describing: error.description))")
         }
@@ -50,6 +52,7 @@ class DetailFlightInfoViewModel {
         httpclient.getPlaneImage(icao: code, success: { (data) in
             if let imageData = data {
                 self.data.imageData = imageData
+                self.delegate?.imageDataReceived()
             }
         }) { error in
             NSLog("Error: \(String(describing: error.description))")

@@ -33,12 +33,12 @@ enum HTTPClientError: Error {
 class HTTPClient {
 
     private let baseFlightInfoPath = "https://opensky-network.org/api/"
-    
+
     private let imageBaseUrl = "https://api.unsplash.com"
     private let imagePath = "/photos/random"
     private let imageAccessKey = "397c50b762e28cf9b1da268b8389df3c6a109b06e11668a2a20ba3a3a35ed575"
     private static let imageCache = NSCache<NSString, NSData>()
-    
+
     private let aicraftBaseUrl = "https://aviation-edge.com/v2/public"
     private let aircraftPath = "/airplaneDatabase"
     private let aircraftAccessKey = "e3d452-749de5"
@@ -108,9 +108,9 @@ class HTTPClient {
 
     func getAircraftInfo(icao: String, success: @escaping (Aircraft) -> Void,
                          failure: @escaping (HTTPClientError) -> Void) {
-        
+
         let paramPath = buildParamAircraftPath(key: aircraftAccessKey, icao: icao)
-        
+
         guard let url = URL(string: aicraftBaseUrl + aircraftPath + paramPath) else {
             DispatchQueue.main.async {
                 failure(.urlGettingError)
@@ -119,19 +119,20 @@ class HTTPClient {
         }
         let urlRequest = URLRequest(url: url)
         let session = URLSession(configuration: .default)
-        
+
         let task = session.dataTask(with: urlRequest) { (data, response, error) in
 
-            guard let data = data else {
+            guard let responceData = data else {
                 DispatchQueue.main.async {
                     failure(.emptyDataTaskError)
                 }
                 return
             }
-            
-            guard let aircraft = try? JSONDecoder().decode([Aircraft].self, from: data) else {
+
+            guard let aircraft = try? JSONDecoder().decode([Aircraft].self, from: responceData) else {
                 DispatchQueue.main.async {
-                    failure(.sessionDataTaskError) // codable error
+                    failure(.sessionDataTaskError)
+                     // codable error
                 }
                 return
             }
@@ -142,7 +143,7 @@ class HTTPClient {
         }
         task.resume()
     }
-    
+
     func getPlaneImage(icao: String, success: @escaping (Data?) -> Void,
                        failure: @escaping (HTTPClientError) -> Void) {
 
@@ -221,19 +222,19 @@ class HTTPClient {
 
         return paramPath.description
     }
-    
+
     private func buildParamAircraftPath(key: String, icao: String) -> String {
         var components = URLComponents()
 
         let queryItemKey = URLQueryItem(name: "key", value: key)
         let queryItemIcao = URLQueryItem(name: "hexIcaoAirplane", value: icao.uppercased())
-        
+
         components.queryItems = [queryItemKey, queryItemIcao]
-        
+
         guard let paramPath = components.url else {
             fatalError("Parameter generation error")
         }
-        
+
         return paramPath.description
     }
 }

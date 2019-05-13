@@ -13,7 +13,7 @@ struct RawFlightInfo {
     var departureAirportCode: String?
     var arrivalTime: Int?
     var departureTime: Int?
-    var code: String?
+    var code: String
 }
 
 extension RawFlightInfo: Decodable {
