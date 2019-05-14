@@ -23,12 +23,12 @@ extension Track {
 }
 
 struct Waypoint: Codable {
-    let time: Int
+    let time: Int?
     let latitude: Float?
     let longitude: Float?
     let baro: Float?
     let trueTrack: Float?
-    let onGround: Bool
+    let onGround: Bool?
 
     init(from decoder: Decoder) throws {
         var container = try decoder.unkeyedContainer()

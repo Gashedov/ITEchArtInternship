@@ -19,6 +19,7 @@ class MapViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         viewModel = MapViewModel(flightTime: flightTime!, airplaneCode: airplaneCode!)
+        viewModel.delegate = self
         GMSServices.provideAPIKey("AIzaSyBRn2GZsZo3ZMkpwuDOX328PfbdojfpdPA")
 
         let camera = GMSCameraPosition.camera(withLatitude: 18.520, longitude: 73.856, zoom: 6.0)

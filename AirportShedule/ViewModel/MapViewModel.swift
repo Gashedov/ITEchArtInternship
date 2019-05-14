@@ -40,7 +40,7 @@ class MapViewModel {
 
     private func prepareToDisplay(track: Track) {
         let cameraLocation = CLLocationCoordinate2D(latitude: Double(track.path.first!.latitude!), longitude: Double(track.path.first!.longitude!))
-        cameraPosition = GMSCameraPosition.camera(withLatitude: cameraLocation.latitude, longitude: cameraLocation.longitude, zoom: 6)
+        cameraPosition = GMSCameraPosition.camera(withLatitude: cameraLocation.latitude, longitude: cameraLocation.longitude, zoom: 3)
         data.removeAllCoordinates()
         for waypoint in track.path {
             data.add(CLLocationCoordinate2D(latitude: Double(waypoint.latitude!), longitude: Double(waypoint.longitude!)))

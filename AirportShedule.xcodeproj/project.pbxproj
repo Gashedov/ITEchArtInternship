@@ -13,7 +13,7 @@
 		3F8B7B3B22662C4E00900967 /* FlightInfoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F8B7B3A22662C4E00900967 /* FlightInfoViewModel.swift */; };
 		3F8B7B3D22662F6000900967 /* SheduleInfoToDisplay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F8B7B3C22662F6000900967 /* SheduleInfoToDisplay.swift */; };
 		3F8D181D228ADF1F009E6EBC /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F8D181C228ADF1F009E6EBC /* MapViewController.swift */; };
-		3F8D181F228AEBD1009E6EBC /* TrackInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F8D181E228AEBD1009E6EBC /* TrackInfo.swift */; };
+		3F8D181F228AEBD1009E6EBC /* Track.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F8D181E228AEBD1009E6EBC /* Track.swift */; };
 		3F8D1821228B0F87009E6EBC /* MapViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F8D1820228B0F87009E6EBC /* MapViewModel.swift */; };
 		3F93ABAB226F4DD8007A477D /* FlightInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F93ABAA226F4DD8007A477D /* FlightInfoViewController.swift */; };
 		3F93ABAD226F5EA1007A477D /* FlightInfoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F93ABAC226F5EA1007A477D /* FlightInfoTableViewCell.swift */; };
@@ -54,7 +54,7 @@
 		3F8B7B3A22662C4E00900967 /* FlightInfoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlightInfoViewModel.swift; sourceTree = "<group>"; };
 		3F8B7B3C22662F6000900967 /* SheduleInfoToDisplay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheduleInfoToDisplay.swift; sourceTree = "<group>"; };
 		3F8D181C228ADF1F009E6EBC /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
-		3F8D181E228AEBD1009E6EBC /* TrackInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackInfo.swift; sourceTree = "<group>"; };
+		3F8D181E228AEBD1009E6EBC /* Track.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Track.swift; sourceTree = "<group>"; };
 		3F8D1820228B0F87009E6EBC /* MapViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewModel.swift; sourceTree = "<group>"; };
 		3F93ABAA226F4DD8007A477D /* FlightInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlightInfoViewController.swift; sourceTree = "<group>"; };
 		3F93ABAC226F5EA1007A477D /* FlightInfoTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlightInfoTableViewCell.swift; sourceTree = "<group>"; };
@@ -187,7 +187,7 @@
 				3F8B7B3C22662F6000900967 /* SheduleInfoToDisplay.swift */,
 				3FA1855722673DD5007AE229 /* FlightInfoToDisplay.swift */,
 				3FA5543D2280773A00C40EF6 /* AircraftInfoToDisplay.swift */,
-				3F8D181E228AEBD1009E6EBC /* TrackInfo.swift */,
+				3F8D181E228AEBD1009E6EBC /* Track.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -385,7 +385,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3FBB0F682277082B0023321D /* MasterFlightInfoViewController.swift in Sources */,
-				3F8D181F228AEBD1009E6EBC /* TrackInfo.swift in Sources */,
+				3F8D181F228AEBD1009E6EBC /* Track.swift in Sources */,
 				3F6C8C53225B92B4008C1DA1 /* RawFlightInfo.swift in Sources */,
 				3F8B7B3D22662F6000900967 /* SheduleInfoToDisplay.swift in Sources */,
 				3FA5543A22804AE000C40EF6 /* DetailFlightInfoViewController.swift in Sources */,

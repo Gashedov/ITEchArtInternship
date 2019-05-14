@@ -48,15 +48,15 @@ class HTTPClient {
     private let aircraftPath = "/airplaneDatabase"
     private let aircraftAccessKey = "6f89c6-46bb4f"
 
-    //private let googleApiKey = "AIzaSyBRn2GZsZo3ZMkpwuDOX328PfbdojfpdPA"
-
+    private let trackPath = "tracks/all"
+    
     // MARK: - public functions
 
     func getTrackInfo(airplaneCode: String, time: String,
                       success: @escaping (Track) -> Void,
                       failure: @escaping (HTTPClientError) -> Void) {
         let components = ["icao24": airplaneCode, "time": time]
-        var urlComponents = URLComponents(string: baseOpenskyApiPath)
+        var urlComponents = URLComponents(string: baseOpenskyApiPath + trackPath)
         urlComponents?.queryItems = parseRequest(requests: components)
 
         guard let url = urlComponents?.url! else {
