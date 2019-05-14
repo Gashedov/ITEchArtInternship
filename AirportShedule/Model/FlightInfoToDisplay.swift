@@ -13,4 +13,5 @@ struct FlightInfoToDisplay {
     var arrivalTime: String?
     var departureTime: String?
     var code: String
+    var time: Int
 }

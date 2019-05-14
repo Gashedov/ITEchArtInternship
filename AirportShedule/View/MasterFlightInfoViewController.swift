@@ -14,7 +14,7 @@ enum FlightType: CaseIterable {
 }
 
 class MasterFlighInfoViewController: UIViewController {
-    
+
     @IBOutlet weak var segmentedControl: UISegmentedControl!
     @IBOutlet weak var embededView: UIView!
     var airportCode: String = ""

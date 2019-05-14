@@ -14,7 +14,7 @@ class TimetableViewCell: UITableViewCell {
     @IBOutlet weak var cityLabel: UILabel!
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var stackView: UIStackView!
-    
+
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
 

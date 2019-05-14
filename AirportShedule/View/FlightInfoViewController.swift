@@ -47,7 +47,7 @@ class FlightInfoViewController: UIViewController, UITableViewDelegate, UITableVi
                 NSLog("Allert destructive action coused")
 
             }}))
-        
+
         viewModel?.getData()
     }
 
@@ -93,9 +93,11 @@ class FlightInfoViewController: UIViewController, UITableViewDelegate, UITableVi
             fatalError("The selected cell is not being displayed by the table")
         }
 
-        if let selectedFlight = viewModel.getFlightCode(by: indexPath) {
-            detailInfoViewController.setAirplaneCode(code: selectedFlight)
+        if let selectedFlight = viewModel.getFlight(by: indexPath) {
+            detailInfoViewController.setAirplaneCode(code: selectedFlight.code)
+            detailInfoViewController.setFlightTime(time: selectedFlight.time)
         }
+
     }
 }
 

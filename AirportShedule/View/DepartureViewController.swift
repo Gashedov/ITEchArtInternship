@@ -15,7 +15,6 @@ class DepartureViewController: UIViewController {
         view.backgroundColor = UIColor.blue
         // Do any additional setup after loading the view.
     }
-    
 
     /*
     // MARK: - Navigation

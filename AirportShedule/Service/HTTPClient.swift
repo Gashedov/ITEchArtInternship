@@ -17,6 +17,7 @@ enum HTTPClientError: Error {
     case urlGettingError
     case sessionDataTaskError
     case emptyDataTaskError
+    case decodingError
 
     var description: String {
         switch self {
@@ -26,13 +27,17 @@ enum HTTPClientError: Error {
             return "Data task throw an error"
         case .emptyDataTaskError:
             return "Could not get data from data task"
+        case .decodingError:
+            return "Could not docode data"
         }
     }
 }
 
 class HTTPClient {
 
-    private let baseFlightInfoPath = "https://opensky-network.org/api/"
+    // MARK:- Properties
+
+    private let baseOpenskyApiPath = "https://opensky-network.org/api/"
 
     private let imageBaseUrl = "https://api.unsplash.com"
     private let imagePath = "/photos/random"
@@ -41,11 +46,59 @@ class HTTPClient {
 
     private let aicraftBaseUrl = "https://aviation-edge.com/v2/public"
     private let aircraftPath = "/airplaneDatabase"
-    private let aircraftAccessKey = "e3d452-749de5"
+    private let aircraftAccessKey = "6f89c6-46bb4f"
+
+    //private let googleApiKey = "AIzaSyBRn2GZsZo3ZMkpwuDOX328PfbdojfpdPA"
+
+    // MARK: - public functions
+
+    func getTrackInfo(airplaneCode: String, time: String,
+                      success: @escaping (Track) -> Void,
+                      failure: @escaping (HTTPClientError) -> Void) {
+        let components = ["icao24": airplaneCode, "time": time]
+        var urlComponents = URLComponents(string: baseOpenskyApiPath)
+        urlComponents?.queryItems = parseRequest(requests: components)
+
+        guard let url = urlComponents?.url! else {
+            return failure(.urlGettingError)
+        }
+
+        let urlRequest = URLRequest(url: url)
+        NSLog("Url genereted: \(urlRequest)")
+        let session = URLSession(configuration: .default)
+
+        let task = session.dataTask(with: urlRequest) { (data, _, error) in
+
+            guard error == nil else {
+                DispatchQueue.main.async {
+                    failure(.sessionDataTaskError)
+                }
+                return
+            }
+
+            guard let responseData = data else {
+                DispatchQueue.main.async {
+                failure(.emptyDataTaskError)
+                }
+                return
+            }
+
+            guard let trackInfo = try? JSONDecoder().decode(Track.self, from: responseData) else {
+                DispatchQueue.main.async {
+                    failure(.decodingError)
+                }
+                return
+            }
+            DispatchQueue.main.async {
+                success(trackInfo)
+            }
+        }
+        task.resume()
+    }
 
     func getFlightInfo (requestType: OpenSkyAPIRequestPath, components: [String: String], success: @escaping ([RawFlightInfo]) -> Void,
                                                     failure: @escaping (HTTPClientError) -> Void) {
-        let basePath = baseFlightInfoPath + requestType.rawValue
+        let basePath = baseOpenskyApiPath + requestType.rawValue
         var urlComponents = URLComponents(string: basePath)
         urlComponents?.queryItems = parseRequest(requests: components)
 
@@ -60,12 +113,16 @@ class HTTPClient {
         let task = session.dataTask(with: urlRequest) { (data, _, error) in
 
             guard error == nil else {
-                failure(.sessionDataTaskError)
+                DispatchQueue.main.async {
+                    failure(.sessionDataTaskError)
+                }
                 return
             }
 
             guard let responseData = data else {
-                failure(.emptyDataTaskError)
+                DispatchQueue.main.async {
+                    failure(.emptyDataTaskError)
+                }
                 return
             }
 
@@ -89,12 +146,16 @@ class HTTPClient {
 
         let task = session.dataTask(with: urlRequest) { (data, _, error) in
             guard error == nil else {
-                failure(.sessionDataTaskError)
+                DispatchQueue.main.async {
+                    failure(.sessionDataTaskError)
+                }
                 return
             }
 
             guard let responseData = data else {
-                failure(.emptyDataTaskError)
+                DispatchQueue.main.async {
+                    failure(.emptyDataTaskError)
+                }
                 return
             }
 
@@ -120,7 +181,14 @@ class HTTPClient {
         let urlRequest = URLRequest(url: url)
         let session = URLSession(configuration: .default)
 
-        let task = session.dataTask(with: urlRequest) { (data, response, error) in
+        let task = session.dataTask(with: urlRequest) { (data, _, error) in
+
+            guard error == nil else {
+                DispatchQueue.main.async {
+                    failure(.sessionDataTaskError)
+                }
+                return
+            }
 
             guard let responceData = data else {
                 DispatchQueue.main.async {
@@ -131,8 +199,7 @@ class HTTPClient {
 
             guard let aircraft = try? JSONDecoder().decode([Aircraft].self, from: responceData) else {
                 DispatchQueue.main.async {
-                    failure(.sessionDataTaskError)
-                     // codable error
+                    failure(.decodingError)
                 }
                 return
             }
@@ -164,7 +231,15 @@ class HTTPClient {
         urlRequest.setValue("Client-ID \(imageAccessKey)", forHTTPHeaderField: "Authorization")
 
         let session = URLSession(configuration: .default)
-        let task = session.dataTask(with: urlRequest) { (data, response, error) in
+        let task = session.dataTask(with: urlRequest) { (data, _, error) in
+
+            guard error == nil else {
+                DispatchQueue.main.async {
+                    failure(.sessionDataTaskError)
+                }
+                return
+            }
+
             guard let data = data else {
                 DispatchQueue.main.async {
                     failure(.emptyDataTaskError)
@@ -175,7 +250,7 @@ class HTTPClient {
             // get image url
             guard let image = try? JSONDecoder().decode(Image.self, from: data) else {
                 DispatchQueue.main.async {
-                    failure(.emptyDataTaskError) // ImageError
+                    failure(.decodingError) // ImageError
                 }
                 return
             }

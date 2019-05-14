@@ -23,7 +23,7 @@ class DetailFlightInfoViewModel {
     init(aircraftCode: String) {
         httpclient = HTTPClient()
         self.aircraftCode = aircraftCode
-        data = (Data(),Aircraft(productionLine: "",
+        data = (Data(), Aircraft(productionLine: "",
                                 planeModel: "",
                                 modelCode: "",
                                 registrationDate: "",

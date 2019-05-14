@@ -8,22 +8,11 @@
 
 import Foundation
 
-struct Aircraft {
+struct Aircraft: Decodable {
     let productionLine: String?
     let planeModel: String?
-    let modelCode : String?
+    let modelCode: String?
     let registrationDate: String?
     let planeAge: String?
     let planeOwner: String?
-}
-
-extension Aircraft: Decodable {
-    enum CodingKeys: String, CodingKey {
-        case productionLine
-        case planeModel
-        case modelCode
-        case registrationDate
-        case planeAge
-        case planeOwner
-    }
 }

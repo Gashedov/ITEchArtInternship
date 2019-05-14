@@ -17,7 +17,7 @@ class FlightInfoViewModel {
     weak var delegate: FlightsViewModelDelegate?
 
     var data = [String: [FlightInfoToDisplay]]()
-    
+
     private var rawData = [RawFlightInfo]()
     private var airports = [AirportInfo]()
     private let httpClient: HTTPClient
@@ -25,7 +25,7 @@ class FlightInfoViewModel {
     private let dateManager: DateManager
     private let dataType: FlightType
     private let airportCode: String
-    
+
     private var group: DispatchGroup?
 
     init(appDelegate: AppDelegate, dataType: FlightType, airportCode: String) {
@@ -40,28 +40,28 @@ class FlightInfoViewModel {
     func getData() {
         getRawData()
         getAirports()
-        
+
         group?.notify(queue: DispatchQueue.main, execute: {
             self.prepareToDisplay()
             self.delegate?.dataReceived()
         })
     }
 
-    func getFlightCode(by index: IndexPath) -> String? {
+    func getFlight(by index: IndexPath) -> FlightInfoToDisplay? {
         let key = data.keys.sorted()[index.section]
         if let airport = data[key]?[index.row] {
-            return airport.code
+            return airport
         }
-        
+
         return nil
     }
-    
+
     // MARK: - private methods
-    
+
     private func getRawData() {
         let request = generateRequest(airportCode: airportCode)
         let type = dataType == .arrival ? OpenSkyAPIRequestPath.arrivalRequest : OpenSkyAPIRequestPath.departureRequest
-        
+
         group?.enter()
         httpClient.getFlightInfo(requestType: type, components: request, success: { data in
             self.group?.leave()
@@ -70,7 +70,7 @@ class FlightInfoViewModel {
             NSLog("Error: \(String(describing: error.description))")
         })
     }
-    
+
     private func getAirports() {
         group?.enter()
         coreDataManager.loadDataFromDB(success: { data in
@@ -97,40 +97,39 @@ class FlightInfoViewModel {
             let arrivalTime = dateManager.convertTimeToString(time: flightInfo.arrivalTime ?? 0)
             let departureTime = dateManager.convertTimeToString(time: flightInfo.departureTime ?? 0)
             var airportName = "N/A"
-            
+
             let lookingCode = dataType == .arrival ? flightInfo.departureAirportCode : flightInfo.arrivalAirportCode
-            
+
             if let code = lookingCode {
                 airportName = airports.first(where: { $0.code == code })?.name ?? "N/A"
             }
             var key = ""
+            var time = 0
 
             switch dataType {
             case .arrival:
-//                getAirportFromCoreData(identifier: flightInfo.arrivalAirportCode ?? "", success: { (name) in
-//                    airportName = name
-//                })
                 key = dateManager.convertDateToString(time: flightInfo.arrivalTime ?? 0)
+                time = flightInfo.arrivalTime! - 10
             case .departure:
-//                getAirportFromCoreData(identifier: flightInfo.departureAirportCode ?? "", success: { (name) in
-//                    airportName = name
-//                })
                 key = dateManager.convertDateToString(time: flightInfo.departureTime ?? 0)
+                time = flightInfo.departureTime! - 10
             }
-            
+
             if result[key] != nil {
                 result[key]?.append(FlightInfoToDisplay(airportName: airportName,
                                                         arrivalTime: arrivalTime,
                                                         departureTime: departureTime,
-                                                        code: flightInfo.code))
+                                                        code: flightInfo.code,
+                                                        time: time))
             } else {
                 result[key] = [FlightInfoToDisplay(airportName: airportName,
                                                    arrivalTime: arrivalTime,
                                                    departureTime: departureTime,
-                                                   code: flightInfo.code)]
+                                                   code: flightInfo.code,
+                                                   time: time)]
             }
         }
-        
+
         data = result
     }
 
