@@ -8,75 +8,111 @@
 
 import UIKit
 
-class SheduleTableViewController: UITableViewController {
+class SheduleTableViewController: UIViewController {
 
-    let viewModel = AirportsViewModel(appDelegate: UIApplication.shared.delegate as? AppDelegate ?? AppDelegate()) // TODO:- fix the force cast
+    private let viewModel = AirportsViewModel(appDelegate: UIApplication.shared.delegate as? AppDelegate ?? AppDelegate())
+    private let searchController = UISearchController(searchResultsController: nil)
+    @IBOutlet weak var tableView: UITableView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         viewModel.delegate = self
+        searchController.searchResultsUpdater = self
+        searchController.dimsBackgroundDuringPresentation = false
+        definesPresentationContext = true
+        tableView.tableHeaderView = searchController.searchBar
+        tableView.dataSource = self
+        tableView.delegate = self
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
         viewModel.getData()
     }
 
-    // MARK: - Table view data source
+    @objc func hendleExpandClose(button: UIButton) {
+        let section = button.tag
+        var indexPaths = [IndexPath]()
+        for row in viewModel.dataToDisplay[section].airportAttributs.indices {
+            let indexPath = IndexPath(row: row, section: section)
+            indexPaths.append(indexPath)
+        }
 
-    override func numberOfSections(in tableView: UITableView) -> Int {
+        if viewModel.dataToDisplay[section].isOpen {
+            viewModel.dataToDisplay[section].isOpen = false
+            tableView.deleteRows(at: indexPaths, with: .automatic)
+        } else {
+            viewModel.dataToDisplay[section].isOpen = true
+            tableView.insertRows(at: indexPaths, with: .automatic)
+        }
+    }
+
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        super.prepare(for: segue, sender: sender)
+
+        guard let flightInfoViewController = segue.destination as? MasterFlighInfoViewController else {
+            fatalError("Unexpected destination: \(segue.destination)")
+        }
+
+        guard let selectedAirportCell = sender as? TimetableViewCell else {
+            fatalError("Unexpected sender: \(String(describing: sender))")
+        }
+
+        guard let indexPath = tableView.indexPath(for: selectedAirportCell) else {
+            fatalError("The selected cell is not being displayed by the table")
+        }
+
+        let selectedAirport = viewModel.dataToDisplay[indexPath.section].airportAttributs[indexPath.row].code
+        flightInfoViewController.setAirportCode(code: selectedAirport)
+
+    }
+}
+
+extension SheduleTableViewController: UITableViewDataSource {
+    func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        return viewModel.data.count
+        return viewModel.dataToDisplay.count
     }
 
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-//        if objectArray[section].isOpen == true {
-//            return objectArray[section].sectionObject.count
-//        } else {
-//            return 1
-//        }
-        
-        return viewModel.data[section].sectionObject.count
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if viewModel.dataToDisplay[section].isOpen {
+            return viewModel.dataToDisplay[section].airportAttributs.count
+        } else {
+            return 0
+        }
     }
 
-    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return viewModel.data[section].sectionName
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "TimetableViewCellReuseIdentifier", for: indexPath) as! TimetableViewCell
+        let airport = viewModel.dataToDisplay[indexPath.section].airportAttributs[indexPath.row]
+        cell.setValues(code: airport.code, city: airport.city ?? "", name: airport.airportName ?? "")
+        return cell
     }
-    
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//        if indexPath.row == 0 {
-//            guard let cell = tableView.dequeueReusableCell(withIdentifier: "SheduleTableViewSectionCell") as? TableViewSectionCell else {
-//                return UITableViewCell()
-//            }
-//
-//ç            cell.backgroundColor = UIColor.gray
-//            return cell
-//        } else {
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: "SheduleTableViewCell") as? TimetableViewCell else {
-                return UITableViewCell()
-            }
-            //cell.textLabel?.text = objectArray[indexPath.section].sectionObject[indexPath.row]
-            cell.backgroundColor = UIColor.white
-        
-            return cell
+}
 
-//        }
-    }
+extension SheduleTableViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let button = UIButton(type: .system)
+        button.setTitle(viewModel.dataToDisplay[section].airportCountry, for: .normal)
+        button.setTitleColor(.black, for: .normal)
+        button.backgroundColor = .gray
+        button.titleLabel?.textAlignment = .left
+        button.tag = section
+        button.addTarget(self, action: #selector(hendleExpandClose), for: .touchUpInside)
 
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        if objectArray[indexPath.section].isOpen == true {
-//            objectArray[indexPath.section].isOpen = false
-//            let sections = IndexSet.init(integer: indexPath.section)
-//            tableView.reloadSections(sections, with: .none)
-//        } else {
-//            objectArray[indexPath.section].isOpen = true
-//            let sections = IndexSet.init(integer: indexPath.section)
-//            tableView.reloadSections(sections, with: .none)
-//        }
+        return button
     }
 }
 
 extension SheduleTableViewController: AirportsViewModelDelegate {
-    func receiveddData() {
+    func receivedData() {
         tableView.reloadData()
-        print(viewModel.data)
+        NSLog(viewModel.dataToDisplay.isEmpty ? "data is empty" : "data updated")
+    }
+}
+
+extension SheduleTableViewController: UISearchResultsUpdating {
+    // calls every time you interact with search bar
+    func updateSearchResults(for searchController: UISearchController) {
+            viewModel.searchCountry(searchingCountry: searchController.searchBar.text!)
     }
 }
